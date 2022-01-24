@@ -1,37 +1,44 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {makeStyles} from '@mui/styles';
 
 import RecordButton from '../components/RecordButton';
 import RecordBackground from '../components/RecordBackground';
+import {ProcessState} from '../enums/ProcessState';
+import DeleteButton from '../components/DeleteButton';
 
 const useStyles = makeStyles({
     container: {
         display: 'flex',
         justifyContent: 'center',
-        width: '100%',
-        height: '100%',
+        width: '100vw',
+        height: '100vh',
+        position: 'relative',
     },
     recordButton: {
-        position: 'fixed',
-        bottom: 100,
+        position: 'absolute',
+        bottom: '50px'
     },
-    recordBackground: {
-        width: '100%',
-        height: '100%',
+    deleteButton: {
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
     }
 });
 
 export default function MainPage() {
 
+    const [image, setImage] = useState<File>();
+    const [processState, setProcessState] = useState<ProcessState>(ProcessState.UPLOAD);
     const classes = useStyles();
-
-    const onClick = () => {};
 
     return (
         <div className={classes.container}>
-            <RecordBackground className={classes.recordBackground}/>
-            <RecordButton onClick={onClick} className={classes.recordButton}/>
+            {processState === ProcessState.SEND &&
+                <DeleteButton setProcessState={setProcessState} setImage={setImage} className={classes.deleteButton}/>
+            }
+            <RecordButton processState={processState} setProcessState={setProcessState} setImage={setImage} className={classes.recordButton}/>
+            <RecordBackground image={image}/>
         </div>
     );
 }

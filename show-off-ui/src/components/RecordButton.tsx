@@ -1,48 +1,49 @@
-import React from 'react';
+import React, {Dispatch, SetStateAction, useState} from 'react';
 
 import {makeStyles} from '@mui/styles';
+import {Button} from '@mui/material';
+import {ProcessState} from '../enums/ProcessState';
 
 const useStyles = makeStyles({
+    imageInput: {
+        display: 'none',
+    },
     button: {
-        position: 'relative'
-    },
-    record: {
-        position: 'absolute',
-        cursor: 'pointer',
-        width: '50px',
-        height: '50px',
-        backgroundColor: 'red',
-        borderRadius: '100%',
-        border: 'none',
-    },
-    innerMargins: {
-        margin: '7px 7px 7px 7px',
-    },
-    ring: {
-        position: 'absolute',
-        width: '60px',
-        height: '60px',
-        borderRadius: '100%',
-        borderStyle: 'solid',
-        borderWidth: '2px',
-        borderColor: 'black',
-        backgroundColor: 'transparent'
+        width: '60vw',
     }
 });
 
 type RecordButtonProps = {
-    onClick: () => void,
+    processState: ProcessState,
+    setProcessState: Dispatch<SetStateAction<ProcessState>>,
+    setImage: Dispatch<SetStateAction<File | undefined>>,
     className?: string
 }
 
-export default function RecordButton({onClick, className}: RecordButtonProps) {
+export default function RecordButton({processState, setProcessState, setImage, className}: RecordButtonProps) {
 
+    const inputFileRef = React.createRef<HTMLInputElement>();
     const classes = useStyles();
 
+    const onFileChangeCapture = ( e: React.ChangeEvent<HTMLInputElement> ) => {
+        if (e.target.files && e.target.files.length !== 0) {
+            setImage(e.target.files[0]);
+            setProcessState(ProcessState.SEND);
+        }
+    };
+
+    const onClick = () => {
+        if (processState === ProcessState.UPLOAD) {
+            inputFileRef.current!.click();
+        } else if (processState === ProcessState.SEND) {
+            console.log('send');
+        }
+    }
+
     return (
-        <div className={`${classes.button} ${className}`}>
-            <div className={classes.ring}/>
-            <button onClick={onClick} className={`${classes.record} ${classes.innerMargins}`}/>
+        <div className={className}>
+            <Button variant="contained" color="error" onClick={onClick} className={classes.button}>{processState}</Button>
+            <input type="file" ref={inputFileRef} onChangeCapture={onFileChangeCapture} accept="image/*" className={classes.imageInput} capture="environment"/>
         </div>
     );
 }
