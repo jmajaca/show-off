@@ -4,9 +4,8 @@ WORKDIR app
 
 COPY . .
 
-EXPOSE 3000
+RUN yarn install && yarn build && yarn global add serve
 
-RUN yarn build
-RUN yarn global add serve
+EXPOSE 3000
 
 CMD serve -s build
