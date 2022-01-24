@@ -1,10 +1,29 @@
 import React from 'react';
 
+import {makeStyles} from '@mui/styles';
+
+import RecordButton from '../components/RecordButton';
+
+const useStyles = makeStyles({
+    container: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    recordButton: {
+        position: 'fixed',
+        bottom: 90,
+    }
+});
+
 export default function MainPage() {
-    
+
+    const classes = useStyles();
+
+    const onClick = () => {};
+
     return (
-        <div>
-            placeholder
+        <div className={classes.container}>
+            <RecordButton onClick={onClick} className={classes.recordButton}/>
         </div>
     );
 }
