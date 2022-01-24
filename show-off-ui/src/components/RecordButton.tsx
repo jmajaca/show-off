@@ -8,6 +8,7 @@ const useStyles = makeStyles({
     },
     record: {
         position: 'absolute',
+        cursor: 'pointer',
         width: '50px',
         height: '50px',
         backgroundColor: 'red',

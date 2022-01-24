@@ -11,7 +11,7 @@ const useStyles = makeStyles({
     },
     recordButton: {
         position: 'fixed',
-        bottom: 90,
+        bottom: 100,
     }
 });
 
