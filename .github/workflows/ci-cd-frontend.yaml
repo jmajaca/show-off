@@ -48,4 +48,4 @@ jobs:
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            kubectl rollout restart deployment show-off-ui
+            minikube kubectl -- rollout restart deployment show-off-ui
