@@ -6,7 +6,7 @@ on:
       - 'frontend'
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
     steps:
       -
@@ -36,3 +36,16 @@ jobs:
           platforms: linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/show-off-ui:latest
           context: show-off-ui
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Rollout application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
+          script: |
+            kubectl rollout restart deployment show-off-ui
