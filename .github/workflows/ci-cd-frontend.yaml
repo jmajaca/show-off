@@ -9,7 +9,8 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      -
+        name: Checkout
         uses: actions/checkout@v2
         with:
           ref: 'frontend'
@@ -34,4 +35,4 @@ jobs:
           push: true
           platforms: linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/show-off-ui:latest
-          context: frontend
+          context: show-off-ui
