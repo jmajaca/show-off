@@ -29,5 +29,5 @@ jobs:
         with:
           push: true
           platforms: linux/arm64
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/show-off-ui:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/show-off-ui:latest
           context: frontend
