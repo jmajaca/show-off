@@ -38,6 +38,7 @@ jobs:
           context: show-off-ui
   deploy:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       -
         name: Rollout application
