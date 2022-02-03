@@ -28,4 +28,5 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: show-off-ui
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/show-off-ui
+          context: frontend
