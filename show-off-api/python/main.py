@@ -4,6 +4,7 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
 from flask import Flask
+from flask_cors import CORS
 
 from endpoints.doc_endpoint import doc_endpoint
 from endpoints.health_endpoint import health_endpoint, check_health
@@ -20,6 +21,8 @@ app = Flask(__name__)
 app.register_blueprint(ocr_endpoint)
 app.register_blueprint(health_endpoint)
 app.register_blueprint(doc_endpoint)
+
+CORS(app)
 
 with app.test_request_context():
     spec.path(view=check_health)
