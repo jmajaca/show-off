@@ -1,0 +1,3 @@
+Flask==2.0.2
+apispec==5.1.1
+apispec_webframeworks==0.5.2
