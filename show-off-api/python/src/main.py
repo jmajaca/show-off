@@ -1,4 +1,5 @@
 import json
+import os
 
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
@@ -8,7 +9,7 @@ from flask_cors import CORS
 
 from endpoints.doc_endpoint import doc_endpoint
 from endpoints.health_endpoint import health_endpoint, check_health
-from endpoints.ocr_endpoint import ocr_endpoint
+from endpoints.ocr_endpoint import ocr_endpoint, read_image
 
 spec = APISpec(
     title='Show Off API',
@@ -26,8 +27,10 @@ CORS(app)
 
 with app.test_request_context():
     spec.path(view=check_health)
+    spec.path(view=read_image)
 
-with open('doc/swagger.json', 'w') as f:
+dir_path = os.path.dirname(os.path.realpath(__file__))
+with open(dir_path + '/doc/swagger.json', 'w') as f:
     json.dump(spec.to_dict(), f)
 
 if __name__ == '__main__':

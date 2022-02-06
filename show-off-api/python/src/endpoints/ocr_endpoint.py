@@ -6,7 +6,7 @@ ocr_endpoint = Blueprint('ocr_endpoint', __name__)
 
 @ocr_endpoint.route('/read', methods=['POST'])
 @cross_origin()
-def read():
+def read_image():
     """Endpoint for submitting image with text so that text can be extracted
     ---
     post:
