@@ -11,7 +11,7 @@ from dataset.SynthDatasetInstance import SynthDatasetInstance
 class SynthDataset(Dataset):
 
     def __init__(self, dir_path: str):
-        super(SynthDataset, self).__init__()
+        super().__init__()
         images = os.listdir(dir_path)
         self.length = len(images)
         self.image_paths = [os.path.join(dir_path, image) for image in images]
