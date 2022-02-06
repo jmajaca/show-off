@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: show-off-api
+  labels:
+    app: show-off-api
+    type: backend-python
+spec:
+  type: NodePort
+  ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 30001
+    protocol: TCP
+  selector:
+    app: show-off-api
