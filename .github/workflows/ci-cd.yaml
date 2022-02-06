@@ -12,11 +12,15 @@ jobs:
     steps:
       - name: Check if project is show-off-ui
         if: github.ref_name == 'frontend'
-        run: echo "PROJECT=show-off-ui" >> $GITHUB_ENV
+        run: |
+          echo "PROJECT=show-off-ui" >> $GITHUB_ENV
+          echo "PROJECT_CONTEXT=show-off-ui" >> $GITHUB_ENV
       -
         name: Check if project is show-off-api
         if: github.ref_name == 'show-off-api'
-        run: echo "PROJECT=show-off-api" >> $GITHUB_ENV
+        run: |
+          echo "PROJECT=show-off-api" >> $GITHUB_ENV
+          echo "PROJECT_CONTEXT=show-off-api/python" >> $GITHUB_ENV
       -
         id: current_project
         name: Sharing current project with other jobs
@@ -47,7 +51,7 @@ jobs:
           push: true
           platforms: linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT }}:latest
-          context: ${{ env.PROJECT }}
+          context: ${{ env.PROJECT_CONTEXT }}
     outputs:
       project: ${{ steps.current_project.outputs.project }}
   deploy:
