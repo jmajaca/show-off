@@ -28,4 +28,4 @@ def read():
 @ocr_endpoint.route('/correct-text', methods=['POST'])
 @cross_origin()
 def correct_text():
-    pass
+    return '', 404
