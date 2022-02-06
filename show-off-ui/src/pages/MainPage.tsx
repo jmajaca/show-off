@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {makeStyles} from '@mui/styles';
 
@@ -6,6 +6,7 @@ import RecordButton from '../components/RecordButton';
 import RecordBackground from '../components/RecordBackground';
 import {ProcessState} from '../enums/ProcessState';
 import DeleteButton from '../components/DeleteButton';
+import {showOffApi} from '../api/show-off/show-off-api';
 
 const useStyles = makeStyles({
     container: {
@@ -31,6 +32,15 @@ export default function MainPage() {
     const [image, setImage] = useState<File>();
     const [processState, setProcessState] = useState<ProcessState>(ProcessState.UPLOAD);
     const classes = useStyles();
+
+    useEffect(() => {
+        if (processState === ProcessState.SENDING) {
+            showOffApi.readFromImage(image!).then(response => {
+                console.log(response);
+                setProcessState(ProcessState.UPLOAD);
+            })
+        }
+    }, [processState])
 
     return (
         <div className={classes.container}>

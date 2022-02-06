@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 
 import {makeStyles} from '@mui/styles';
 import {Button} from '@mui/material';
@@ -36,7 +36,7 @@ export default function RecordButton({processState, setProcessState, setImage, c
         if (processState === ProcessState.UPLOAD) {
             inputFileRef.current!.click();
         } else if (processState === ProcessState.SEND) {
-            console.log('send');
+            setProcessState(ProcessState.SENDING);
         }
     }
 
