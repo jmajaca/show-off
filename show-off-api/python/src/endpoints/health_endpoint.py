@@ -13,4 +13,4 @@ def check_health():
         200:
           description: App is running
     """
-    return 200
+    return '', 200

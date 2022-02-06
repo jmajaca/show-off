@@ -1,0 +1,4 @@
+src/doc/swagger.json
+README.md
+Dockerfile
+.dockerignore
