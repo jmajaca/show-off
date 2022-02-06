@@ -1,19 +1,31 @@
-name: ci-cd-frontend
+name: ci-cd
 
 on:
   push:
     branches:
       - 'frontend'
+      - 'show-off-api'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Check if project is show-off-ui
+        if: github.ref_name == 'frontend'
+        run: echo "PROJECT=show-off-ui" >> $GITHUB_ENV
+      -
+        name: Check if project is show-off-api
+        if: github.ref_name == 'show-off-api'
+        run: echo "PROJECT=show-off-api" >> $GITHUB_ENV
+      -
+        id: current_project
+        name: Sharing current project with other jobs
+        run: echo "::set-output name=project::${{ env.PROJECT }}"
       -
         name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: 'frontend'
+          ref: ${{ env.PROJECT }}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -34,8 +46,8 @@ jobs:
         with:
           push: true
           platforms: linux/arm64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/show-off-ui:latest
-          context: show-off-ui
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT }}:latest
+          context: ${{ env.PROJECT }}
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -49,4 +61,4 @@ jobs:
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            minikube kubectl -- rollout restart deployment show-off-ui
+            minikube kubectl -- rollout restart deployment ${{ jobs.build.steps.current_project.outputs.project }}
