@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_cors import cross_origin
 
-from src.api.api import DetectionAPI
+from api.api import DetectionAPI
 
 ocr_endpoint = Blueprint('ocr_endpoint', __name__)
 

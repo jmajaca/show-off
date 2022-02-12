@@ -5,8 +5,8 @@ import requests
 from requests import Response
 from werkzeug.datastructures import FileStorage
 
-from src import env
-from src.models.detection_api import TextBox
+import env
+from models.detection_api import TextBox
 
 
 class PayloadType(Enum):
