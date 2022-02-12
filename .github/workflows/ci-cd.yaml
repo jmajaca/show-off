@@ -5,6 +5,7 @@ on:
     branches:
       - 'frontend'
       - 'show-off-api'
+      - 'detection'
 
 jobs:
   build:
@@ -21,6 +22,12 @@ jobs:
         run: |
           echo "PROJECT=show-off-api" >> $GITHUB_ENV
           echo "PROJECT_CONTEXT=show-off-api/python" >> $GITHUB_ENV
+      -
+        name: Check if project is detection-api
+        if: github.ref_name == 'detection'
+        run: |
+          echo "PROJECT=detection-api" >> $GITHUB_ENV
+          echo "PROJECT_CONTEXT=detection/python" >> $GITHUB_ENV
       -
         id: current_project
         name: Sharing current project with other jobs
