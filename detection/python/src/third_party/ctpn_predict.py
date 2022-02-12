@@ -5,11 +5,11 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from python.third_party.ctpn_utils import gen_anchor, bbox_transfor_inv, clip_box, filter_bbox, nms, TextProposalConnectorOriented
-from python.third_party.ctpn_utils import resize
+from python.src.third_party.ctpn_utils import gen_anchor, bbox_transfor_inv, clip_box, filter_bbox, nms, TextProposalConnectorOriented
+from python.src.third_party.ctpn_utils import resize
 
-from python.third_party import ctpn_config
-from python.third_party.ctpn_model import CTPN
+from python.src.third_party import ctpn_config
+from python.src.third_party.ctpn_model import CTPN
 
 prob_thresh = 0.5
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -21,7 +21,7 @@ model.to(device)
 model.eval()
 
 
-def get_det_boxes(image: np.ndarray) -> list:
+def get_det_boxes(image: np.ndarray) -> np.ndarray:
     image = resize(image, height=720)
     h, w = image.shape[:2]
     image = image.astype(np.float32) - ctpn_config.IMAGE_MEAN
