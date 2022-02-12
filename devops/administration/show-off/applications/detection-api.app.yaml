@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: detection-api
+  type: app
+  namespace: show-off
+spec:
+  project: show-off
+  source:
+    repoURL: git@github.com:jmajaca/show-off.git
+    targetRevision: devops
+    path: devops/applications/show-off/detection-api
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: show-off
