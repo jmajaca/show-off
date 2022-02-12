@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: show-off-ui
-  namespace: show-off
+  namespace: argocd
 spec:
   project: argocd
   source:
