@@ -36,4 +36,4 @@ class DetectionAPI(API):
 
     def get_text_boxes(self, image: FileStorage) -> list[TextBox]:
         response = self.post(path='/boxes', payload={'image': image}, content_type=PayloadType.FILE)
-        return response.json()
+        return [TextBox(**element) for element in response.json()]
