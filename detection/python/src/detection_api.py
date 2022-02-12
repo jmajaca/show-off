@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+from datetime import datetime
 
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
@@ -30,7 +31,10 @@ def determine_boxes():
       responses:
         200:
           description: Process of determining text boxes completed successfully
-        404:
+          content:
+            application/json:
+              schema: TextBoxSchema
+        400:
           description: Invalid image has been sent
         500:
           description: Error occurred while in process of determining text boxes
@@ -41,7 +45,7 @@ def determine_boxes():
         image_string = image.read()
     except Exception as e:
         logging.warning('Invalid image file sent', e)
-        return '', 404
+        return {'timestamp': datetime.now(), 'error': str(e)}, 400
     boxes = Detection.get_text_boxes(image_string)
     result = []
     for index, box in enumerate(boxes):
