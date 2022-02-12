@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: detection-api
-  type: app
   namespace: show-off
 spec:
   project: show-off
