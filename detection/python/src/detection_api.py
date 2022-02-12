@@ -8,7 +8,7 @@ from apispec_webframeworks.flask import FlaskPlugin
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from python.src.detection import Detection
+from detection import Detection
 
 app = Flask(__name__, static_folder='static')
 CORS(app)

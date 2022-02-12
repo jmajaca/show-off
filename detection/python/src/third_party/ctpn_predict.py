@@ -5,11 +5,11 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from python.src.third_party.ctpn_utils import gen_anchor, bbox_transfor_inv, clip_box, filter_bbox, nms, TextProposalConnectorOriented
-from python.src.third_party.ctpn_utils import resize
+from third_party import ctpn_config
+from third_party.ctpn_utils import gen_anchor, bbox_transfor_inv, clip_box, filter_bbox, nms, TextProposalConnectorOriented
+from third_party.ctpn_utils import resize
 
-from python.src.third_party import ctpn_config
-from python.src.third_party.ctpn_model import CTPN
+from third_party.ctpn_model import CTPN
 
 prob_thresh = 0.5
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
