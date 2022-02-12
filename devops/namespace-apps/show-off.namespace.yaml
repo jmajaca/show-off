@@ -6,9 +6,14 @@ metadata:
 spec:
   project: argocd
   source:
+    directory:
+      jsonnet: { }
+      recurse: true
     repoURL: git@github.com:jmajaca/show-off.git
     targetRevision: devops
     path: devops/administration/show-off
   destination:
     server: https://kubernetes.default.svc
     namespace: show-off
+  syncPolicy:
+    automated: { }

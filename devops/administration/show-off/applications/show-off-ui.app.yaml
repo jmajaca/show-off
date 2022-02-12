@@ -6,9 +6,14 @@ metadata:
 spec:
   project: show-off
   source:
+    directory:
+      jsonnet: { }
+      recurse: true
     repoURL: git@github.com:jmajaca/show-off.git
     targetRevision: devops
     path: devops/applications/show-off/show-off-ui
   destination:
     server: https://kubernetes.default.svc
     namespace: show-off
+  syncPolicy:
+    automated: { }
