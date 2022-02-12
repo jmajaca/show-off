@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: show-off-api
+  name: detection-api
   labels:
-    app: show-off-api
+    app: detection-api
     type: backend-python
 spec:
   selector:
     matchLabels:
-      app: show-off-api
+      app: detection-api
   replicas: 1
   revisionHistoryLimit: 1
   template:
     metadata:
       labels:
-        app: show-off-api
+        app: detection-api
         type: backend-python
     spec:
       containers:
-      - name: show-off-api
-        image: spaladium/show-off-api
+      - name: detection-api
+        image: spaladium/detection-api
         env:
-          - name: DETECTION_API_URL
-            valueFrom:
-              configMapKeyRef:
-                name: internal-urls
-                key: detection_api_url
+          - name: CTPN_WEIGHTS_FILE
+            value: /config/weights/CTPN.pth
+        volumeMounts:
+          - mountPath: /config/weights/
+            name: k8s-local-volume
         ports:
         - containerPort: 5000
         readinessProbe:
@@ -39,3 +39,7 @@ spec:
             port: 5000
           initialDelaySeconds: 10
           periodSeconds: 5
+      volumes:
+        - name: k8s-local-volume
+          hostPath:
+            path: /var/kubernetes/show-off-pv

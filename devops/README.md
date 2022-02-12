@@ -11,3 +11,8 @@ Resources for creating build part of pipeline can be found at
 [docs.docker](https://docs.docker.com/ci-cd/github-actions/) and
 [blog.docker](https://www.docker.com/blog/docker-v2-github-action-is-now-ga/).
 For deploy part of pipeline [this](https://github.com/appleboy/ssh-action) GitHub action was used.
+
+## Volumes
+
+Volume for pre-trained weights was created with command `minikube mount /var/kubernetes/show-off:/var/kubernetes &`.
+Directory `/var/kubernetes/show-off` contains files: `CTPN.pth`.
