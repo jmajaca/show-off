@@ -12,3 +12,11 @@ class TextBoxSchema(Schema):
     ord_num = fields.Int()
     points = fields.List(fields.Nested(PointSchema))
     probability = fields.Float()
+
+
+class MinimalTextBoxSchema(Schema):
+
+    start_x: fields.Int()
+    start_y: fields.Int()
+    width: fields.Int()
+    height: fields.Int()

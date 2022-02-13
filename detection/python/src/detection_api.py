@@ -8,8 +8,10 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from typing import Tuple
 
-from detection import Detection
+from detection_service import DetectionService
+from exceptions import InvalidImageError
 
 app = Flask(__name__, static_folder='static')
 CORS(app)
@@ -41,19 +43,42 @@ def determine_boxes():
     """
     try:
         files = request.files.to_dict()
-        image = files['image']
-        image_string = image.read()
-    except Exception as e:
+        image_string = DetectionService.read_image_as_string(files)
+        result = DetectionService.configure_box_response(image_string)
+        return jsonify(result), 200
+    except InvalidImageError as e:
         logging.warning('Invalid image file sent', e)
-        return {'timestamp': datetime.now(), 'error': str(e)}, 400
-    boxes = Detection.get_text_boxes(image_string)
-    result = []
-    for index, box in enumerate(boxes):
-        points = list(map(int, box[:-1]))
-        points = [{'axis_x': points[i], 'axis_y': points[i+1]} for i in range(0, len(points), 2)]
-        element = {'ord_num': index, 'points': points, 'probability': round(box[-1], 4)}
-        result.append(element)
-    return jsonify(result), 200
+        return create_error_response(e, 400)
+    except Exception as e:
+        logging.error('Error occurred while determining text boxes', e)
+        return create_error_response(e, 500)
+
+
+@app.route('/minimal-boxes', methods=['POST'])
+def determine_minimal_boxes():
+    """Endpoint for determining minimal text boxes on image
+    ---
+    post:
+      description: For given image return minimal text boxes
+      responses:
+        200:
+          description: Process of determining minimal text boxes completed successfully
+        400:
+          description: Invalid image has been sent
+        500:
+          description: Error occurred while in process of determining minimal text boxes
+    """
+    try:
+        files = request.files.to_dict()
+        image_string = DetectionService.read_image_as_string(files)
+        result = DetectionService.configure_box_response(image_string, 'minimal')
+        return jsonify(result), 200
+    except InvalidImageError as e:
+        logging.warning('Invalid image file sent', e)
+        return create_error_response(e, 400)
+    except Exception as e:
+        logging.error('Error occurred while determining minimal text boxes', e)
+        return create_error_response(e, 500)
 
 
 @app.route('/health', methods=['GET'])
@@ -72,6 +97,10 @@ def check_health():
 @app.route('/doc')
 def doc():
     return app.send_static_file('index.html')
+
+
+def create_error_response(e: Exception, status: int) -> Tuple[dict, int]:
+    return {'timestamp': datetime.now(), 'error': str(e)}, status
 
 
 with app.test_request_context():
