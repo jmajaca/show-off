@@ -22,3 +22,14 @@ spec:
         image: spaladium/show-off-ui
         ports:
         - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /show-off/health
+            port: 3000
+          initialDelaySeconds: 20
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 20
+          periodSeconds: 5
