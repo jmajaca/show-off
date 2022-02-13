@@ -4,7 +4,7 @@ metadata:
   name: show-off
   namespace: argocd
 spec:
-  project: argocd
+  project: show-off
   source:
     directory:
       jsonnet: { }
