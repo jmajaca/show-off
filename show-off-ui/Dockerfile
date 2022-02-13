@@ -8,4 +8,4 @@ RUN yarn install && yarn build && yarn global add serve
 
 EXPOSE 3000
 
-CMD serve -s build
+CMD serve -s build:prod

@@ -7,6 +7,9 @@ import RecordBackground from '../components/RecordBackground';
 import {ProcessState} from '../enums/ProcessState';
 import DeleteButton from '../components/DeleteButton';
 import {showOffApi} from '../api/show-off/show-off-api';
+import {resizeFile} from '../utils/ImageResizer';
+
+const IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT!);
 
 const useStyles = makeStyles({
     container: {
@@ -35,10 +38,12 @@ export default function MainPage() {
 
     useEffect(() => {
         if (processState === ProcessState.SENDING) {
-            showOffApi.readFromImage(image!).then(response => {
-                console.log(response);
-                setProcessState(ProcessState.UPLOAD);
-            })
+            resizeFile(image!, IMAGE_HEIGHT).then(resizedImage => {
+                showOffApi.readFromImage(resizedImage).then(response => {
+                    console.log(response);
+                    setProcessState(ProcessState.UPLOAD);
+                })
+            });
         }
     }, [processState])
 
