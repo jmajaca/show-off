@@ -33,8 +33,9 @@ class DetectionService:
                 points = list(map(int, box[:-1]))
                 start_x = min([points[0], points[4]])
                 start_y = min([points[1], points[3]])
-                element = {'start_x': start_x, 'start_y': start_y, 'width': points[3] - start_x,
-                           'height': points[5] - start_y}
+                end_x = max([points[2], points[6]])
+                end_y = max([points[5], points[7]])
+                element = {'start_x': start_x, 'start_y': start_y, 'width': end_x - start_x, 'height': end_y - start_y}
             else:
                 points = list(map(int, box[:-1]))
                 points = [{'axis_x': points[i], 'axis_y': points[i + 1]} for i in range(0, len(points), 2)]
