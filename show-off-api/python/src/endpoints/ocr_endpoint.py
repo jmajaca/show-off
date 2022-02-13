@@ -1,12 +1,13 @@
 import logging
 from datetime import datetime
 
+import cv2
 from flask import Blueprint, request
 from flask_cors import cross_origin
 
 from api.api import DetectionAPI
 from exceptions.exceptions import ImageDimensionsTooLargeError
-from utils.image_utils import ImageUtils
+from services.image_service import ImageService
 
 ocr_endpoint = Blueprint('ocr_endpoint', __name__)
 
@@ -33,15 +34,16 @@ def read_image():
     """
     files = request.files.to_dict()
     image = files['image']
-    cv2_image = ImageUtils.cv2_convert(image)
+    cv2_image = ImageService.cv2_convert(image)
     try:
-        ImageUtils.check_dimensions(cv2_image)
+        ImageService.check_dimensions(cv2_image)
     except ImageDimensionsTooLargeError as e:
         logging.error('Invalid image', e)
         return {'timestamp': datetime.now(), 'error': str(e)}, 400
-    text_boxes = detection_api.get_text_boxes(image)
+    text_boxes = detection_api.get_minimal_text_boxes(image)
     for i, box in enumerate(text_boxes):
-        cut_image = ImageUtils.cut_box(cv2_image, box)
+        cut_image = ImageService.cut_min_box(cv2_image, box)
+        cv2.imwrite(f'{i}.jpg', cut_image)
     return {}, 200
 
 

@@ -6,7 +6,7 @@ from requests import Response
 from werkzeug.datastructures import FileStorage
 
 import env
-from models.detection_api import TextBox
+from models.detection_api import TextBox, MinimalTextBox
 
 
 class PayloadType(Enum):
@@ -37,3 +37,7 @@ class DetectionAPI(API):
     def get_text_boxes(self, image: FileStorage) -> list[TextBox]:
         response = self.post(path='/boxes', payload={'image': image}, content_type=PayloadType.FILE)
         return [TextBox(**element) for element in response.json()]
+
+    def get_minimal_text_boxes(self, image: FileStorage) -> list[MinimalTextBox]:
+        response = self.post(path='/minimal-boxes', payload={'image': image}, content_type=PayloadType.FILE)
+        return [MinimalTextBox(**element) for element in response.json()]

@@ -3,10 +3,10 @@ import numpy as np
 from werkzeug.datastructures import FileStorage
 
 from exceptions.exceptions import ImageDimensionsTooLargeError
-from models.detection_api import TextBox
+from models.detection_api import TextBox, MinimalTextBox
 
 
-class ImageUtils:
+class ImageService:
 
     @staticmethod
     def cv2_convert(image: FileStorage) -> np.ndarray:
@@ -27,4 +27,9 @@ class ImageUtils:
         height = box.points[2].axis_y - start_y
         width = box.points[1].axis_x - start_x
         crop_img = image[start_y:start_y + height, start_x:start_x + width].copy()
+        return crop_img
+
+    @staticmethod
+    def cut_min_box(image: np.ndarray, box: MinimalTextBox) -> np.ndarray:
+        crop_img = image[box.start_y:box.start_y + box.height, box.start_x:box.start_x + box.width].copy()
         return crop_img

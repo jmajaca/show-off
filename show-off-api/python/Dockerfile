@@ -2,7 +2,7 @@ FROM python:3.10.2-slim
 
 WORKDIR app
 
-RUN apt update && apt -y install build-essential libpcre3 libpcre3-dev
+RUN apt update && apt -y install build-essential libpcre3 libpcre3-dev ffmpeg libsm6 libxext6
 
 COPY . .
 RUN pip install -r requirments.txt && pip install uwsgi
