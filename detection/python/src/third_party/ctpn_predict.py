@@ -7,7 +7,6 @@ import torch.nn.functional as F
 
 from third_party import ctpn_config
 from third_party.ctpn_utils import gen_anchor, bbox_transfor_inv, clip_box, filter_bbox, nms, TextProposalConnectorOriented
-from third_party.ctpn_utils import resize
 
 from third_party.ctpn_model import CTPN
 
@@ -22,7 +21,6 @@ model.eval()
 
 
 def get_det_boxes(image: np.ndarray) -> np.ndarray:
-    image = resize(image, height=720)
     h, w = image.shape[:2]
     image = image.astype(np.float32) - ctpn_config.IMAGE_MEAN
     image = torch.from_numpy(image.transpose(2, 0, 1)).unsqueeze(0).float()
