@@ -1,15 +1,12 @@
 import Resizer from "react-image-file-resizer";
 
-
 type ImageDimensions = {
     height: number,
     width: number,
 }
 
-
-
-export const resizeFile = (file: File, height: number) =>
-    new Promise<any>((resolve) => {
+export const resizeFile = (file: File, height: number) => {
+    return new Promise<File>((resolve) => {
         const fileAsDataURL = window.URL.createObjectURL(file);
         getHeightAndWidthFromDataUrl(fileAsDataURL).then(dimensions => {
             const img_height = dimensions.height;
@@ -19,19 +16,21 @@ export const resizeFile = (file: File, height: number) =>
                 file,
                 Math.round(img_width * ratio),
                 height,
-                "JPG",
+                "JPEG",
                 100,
                 0,
                 (uri) => {
-                    resolve(uri);
+                    resolve(uri as unknown as File);
                 },
                 "file"
             );
         });
     });
+}
 
-const getHeightAndWidthFromDataUrl = (dataURL: string) =>
-    new Promise<ImageDimensions>(resolve => {
+
+const getHeightAndWidthFromDataUrl = (dataURL: string) => {
+    return new Promise<ImageDimensions>(resolve => {
         const img = new Image();
         img.onload = () => {
             resolve({
@@ -41,3 +40,4 @@ const getHeightAndWidthFromDataUrl = (dataURL: string) =>
         }
         img.src = dataURL;
     });
+}
