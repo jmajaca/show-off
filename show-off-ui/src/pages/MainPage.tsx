@@ -8,6 +8,7 @@ import {ProcessState} from '../enums/ProcessState';
 import DeleteButton from '../components/DeleteButton';
 import {showOffApi} from '../api/show-off/show-off-api';
 import {resizeFile} from '../utils/ImageResizer';
+import TextPopup from '../components/TextPopup';
 
 const IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT!);
 
@@ -30,11 +31,24 @@ const useStyles = makeStyles({
     }
 });
 
+export type TextPopupData = {
+    open: boolean,
+    text: string,
+}
+
 export default function MainPage() {
 
     const [image, setImage] = useState<File>();
     const [processState, setProcessState] = useState<ProcessState>(ProcessState.UPLOAD);
+    const [popupData, setPopupData] = useState<TextPopupData>({open: false, text: ''});
     const classes = useStyles();
+
+    const handleTextPopupClose = (affirmative: boolean) => {
+        if (affirmative) {
+            console.log('process');
+        }
+        setPopupData({open: false, text: popupData.text});
+    }
 
     useEffect(() => {
         if (processState === ProcessState.SENDING) {
@@ -42,10 +56,11 @@ export default function MainPage() {
                 showOffApi.readFromImage(resizedImage).then(response => {
                     console.log(response);
                     setProcessState(ProcessState.UPLOAD);
+                    setPopupData({open: true, text: response.text});
                 })
             });
         }
-    }, [processState])
+    }, [processState]);
 
     return (
         <div className={classes.container}>
@@ -54,6 +69,7 @@ export default function MainPage() {
             }
             <RecordButton processState={processState} setProcessState={setProcessState} setImage={setImage} className={classes.recordButton}/>
             <RecordBackground image={image}/>
+            <TextPopup open={popupData.open} text={popupData.text} handleClose={handleTextPopupClose}/>
         </div>
     );
 }
