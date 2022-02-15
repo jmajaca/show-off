@@ -1,7 +1,8 @@
-import React, {createRef, useEffect, useState} from 'react';
-import {Button} from '@mui/material';
+import React, {createRef, Dispatch, SetStateAction, useEffect, useState} from 'react';
+
 import {makeStyles} from '@mui/styles';
-import background from '../assets/background.png';
+
+import {ProcessState} from '../enums/ProcessState';
 
 const useStyles = makeStyles({
     videoWrapper: {
@@ -13,18 +14,21 @@ const useStyles = makeStyles({
     video: {
         width: '100%',
         height: '100%',
+    },
+    hideCanvas: {
+        display: 'none'
     }
 });
 
 type VideoBackgroundProps = {
-    image: File | undefined,
-    setImage: any,
+    processState: ProcessState,
+    setImage: Dispatch<SetStateAction<File | undefined>>,
     className?: string,
 }
 
-export default function VideoBackground({image, setImage}: VideoBackgroundProps) {
+export default function VideoBackground({processState, setImage, className}: VideoBackgroundProps) {
 
-    const [imageURL, setImageURL] = useState<string>();
+    const [imageURL, setImageURL] = useState<string>("");
     const classes = useStyles();
 
     const videoRef = createRef<HTMLVideoElement>();
@@ -33,7 +37,27 @@ export default function VideoBackground({image, setImage}: VideoBackgroundProps)
 
     useEffect(() => {
         startVideo()
+        console.log('video')
     }, [videoRef]);
+
+    useEffect(() => {
+        switch (processState) {
+            case ProcessState.UPLOAD:
+                setImageURL("");
+                break;
+            case ProcessState.SEND:
+                takePicture();
+                break;
+            default:
+                break;
+        }
+    }, [processState]);
+
+    useEffect(() => {
+        if (imageURL !== "") {
+            photoRef.current!.setAttribute('src', imageURL);
+        }
+    })
 
     const startVideo = () => {
         navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(stream => {
@@ -48,12 +72,6 @@ export default function VideoBackground({image, setImage}: VideoBackgroundProps)
             let canvas = canvasRef.current!
             canvas.toBlob((blob) => {
                 let file = new File([blob!], 'image/png', {type: 'image/png'})
-                // let capturedImage = new Image();
-                // let url = URL.createObjectURL(blob!);
-                // capturedImage.onload = function() {
-                //     URL.revokeObjectURL(url);
-                // };
-                // capturedImage.src = url;
                 resolve(file)
             }, 'image/png', 100);
         })
@@ -67,33 +85,18 @@ export default function VideoBackground({image, setImage}: VideoBackgroundProps)
         if (context) {
             context.drawImage(videoRef.current!, 0, 0, videoRef.current!.videoWidth, videoRef.current!.videoHeight);
             let data = canvas.toDataURL('image/png');
-            photoRef.current!.setAttribute('src', data);
+            setImageURL(data)
             generateBlob().then(blob => {
-                console.log(blob)
                 setImage(blob);
             })
         }
     }
 
-    // React.useEffect(() => {
-    //     if (image !== undefined) {
-    //         setImageURL(URL.createObjectURL(image));
-    //     } else {
-    //         setImageURL(background);
-    //     }
-    // }, [image]);
-
     return (
         <div className={classes.videoWrapper}>
-            <video ref={videoRef} muted autoPlay className={classes.video} />
-            <div style={{display: 'none'}}>
-                <canvas ref={canvasRef}>
-                    <div>
-                        <img ref={photoRef} alt=""/>
-                    </div>
-                </canvas>
-            </div>
-            <Button onClick={takePicture}>CLICK</Button>
+            {imageURL === "" && <video ref={videoRef} muted autoPlay className={classes.video} />}
+            <canvas ref={canvasRef} className={classes.hideCanvas} />
+            {imageURL !== "" && <img className={classes.video} ref={photoRef} alt=""/>}
         </div>
     );
 
