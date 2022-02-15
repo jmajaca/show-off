@@ -35,10 +35,7 @@ export default function VideoBackground({processState, setImage, className}: Vid
     const canvasRef = createRef<HTMLCanvasElement>();
     const photoRef = createRef<HTMLImageElement>();
 
-    useEffect(() => {
-        startVideo()
-        console.log('video')
-    }, [videoRef]);
+
 
     useEffect(() => {
         switch (processState) {
@@ -56,8 +53,10 @@ export default function VideoBackground({processState, setImage, className}: Vid
     useEffect(() => {
         if (imageURL !== "") {
             photoRef.current!.setAttribute('src', imageURL);
+        } else {
+            startVideo();
         }
-    })
+    }, [imageURL])
 
     const startVideo = () => {
         navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(stream => {

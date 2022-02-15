@@ -61,7 +61,7 @@ export default function MainPage() {
         setPopupData({open: false, text: popupData.text});
     }
 
-    const changeProcessStates = () => {
+    const onVideoButtonClick = () => {
         switch (processState) {
             case ProcessState.UPLOAD:
                 setProcessState(ProcessState.SEND);
@@ -74,13 +74,18 @@ export default function MainPage() {
         }
     }
 
+    const onDeleteButtonClick = () => {
+        setProcessState(ProcessState.UPLOAD);
+        setImage(undefined);
+    }
+
     return (
         <div className={classes.container}>
             {processState === ProcessState.SEND &&
-                <DeleteButton setProcessState={setProcessState} setImage={setImage} className={classes.deleteButton}/>
+                <DeleteButton onClick={onDeleteButtonClick} className={classes.deleteButton}/>
             }
             <VideoBackground processState={processState} setImage={setImage}/>
-            <VideoButton processState={processState} onClick={changeProcessStates} className={classes.recordButton}/>
+            <VideoButton processState={processState} onClick={onVideoButtonClick} className={classes.recordButton}/>
             <TextPopup open={popupData.open} text={popupData.text} handleClose={handleTextPopupClose}/>
         </div>
     );
