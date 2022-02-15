@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {createRef, LegacyRef, useEffect, useState} from 'react';
 
 import {makeStyles} from '@mui/styles';
 
@@ -9,6 +9,7 @@ import DeleteButton from '../components/DeleteButton';
 import {showOffApi} from '../api/show-off/show-off-api';
 import {resizeFile} from '../utils/ImageResizer';
 import TextPopup from '../components/TextPopup';
+import VideoBackground from '../components/VideoBackground';
 
 const IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT!);
 
@@ -39,7 +40,7 @@ export type TextPopupData = {
 export default function MainPage() {
 
     const [image, setImage] = useState<File>();
-    const [processState, setProcessState] = useState<ProcessState>(ProcessState.UPLOAD);
+    const [processState, setProcessState] = useState<ProcessState>(ProcessState.SEND);
     const [popupData, setPopupData] = useState<TextPopupData>({open: false, text: ''});
     const classes = useStyles();
 
@@ -68,7 +69,7 @@ export default function MainPage() {
                 <DeleteButton setProcessState={setProcessState} setImage={setImage} className={classes.deleteButton}/>
             }
             <RecordButton processState={processState} setProcessState={setProcessState} setImage={setImage} className={classes.recordButton}/>
-            <RecordBackground image={image}/>
+            <VideoBackground image={image} setImage={setImage}/>
             <TextPopup open={popupData.open} text={popupData.text} handleClose={handleTextPopupClose}/>
         </div>
     );

@@ -7,6 +7,7 @@ type ImageDimensions = {
 
 export const resizeFile = (file: File, height: number) => {
     return new Promise<File>((resolve) => {
+        console.log(file)
         const fileAsDataURL = window.URL.createObjectURL(file);
         getHeightAndWidthFromDataUrl(fileAsDataURL).then(dimensions => {
             const img_height = dimensions.height;
