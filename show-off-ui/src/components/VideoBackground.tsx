@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     video: {
         width: '100%',
         height: '100%',
+        objectFit: 'cover',
     },
     hideCanvas: {
         display: 'none'
