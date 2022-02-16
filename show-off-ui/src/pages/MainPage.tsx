@@ -8,6 +8,7 @@ import {resizeFile} from '../utils/ImageResizer';
 import TextPopup from '../components/TextPopup';
 import VideoBackground from '../components/VideoBackground';
 import VideoButton from '../components/VideoButton';
+import {ImageWrapper} from '../types/ImageWrapper';
 
 const IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT!);
 
@@ -37,7 +38,7 @@ export type TextPopupData = {
 
 export default function MainPage() {
 
-    const [image, setImage] = useState<File>();
+    const [image, setImage] = useState<ImageWrapper | undefined>();
     const [processState, setProcessState] = useState<ProcessState>(ProcessState.UPLOAD);
     const [popupData, setPopupData] = useState<TextPopupData>({open: false, text: ''});
     const classes = useStyles();

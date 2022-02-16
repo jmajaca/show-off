@@ -3,6 +3,7 @@ import React, {createRef, Dispatch, SetStateAction, useEffect, useState} from 'r
 import {makeStyles} from '@mui/styles';
 
 import {ProcessState} from '../enums/ProcessState';
+import {ImageWrapper} from '../types/ImageWrapper';
 
 const useStyles = makeStyles({
     videoWrapper: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles({
 
 type VideoBackgroundProps = {
     processState: ProcessState,
-    setImage: Dispatch<SetStateAction<File | undefined>>,
+    setImage: Dispatch<SetStateAction<ImageWrapper | undefined>>,
     className?: string,
 }
 
@@ -86,7 +87,7 @@ export default function VideoBackground({processState, setImage, className}: Vid
             let data = canvas.toDataURL('image/png');
             setImageURL(data)
             generateBlob().then(blob => {
-                setImage(blob);
+                setImage({image: blob, width: canvas.width, height: canvas.height});
             })
         }
     }
