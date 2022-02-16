@@ -61,7 +61,7 @@ export default function VideoBackground({processState, setImage, className}: Vid
     }, [imageURL])
 
     const startVideo = () => {
-        navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}, audio: false}).then(stream => {
+        navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment', frameRate: 60}, audio: false}).then(stream => {
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
             }
