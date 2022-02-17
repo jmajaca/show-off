@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 import {makeStyles} from '@mui/styles';
 
-import background from '../assets/background.png'
+import background from '../../assets/background.png'
 
 const useStyles = makeStyles({
     image: {

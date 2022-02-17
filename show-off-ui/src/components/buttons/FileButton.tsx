@@ -8,10 +8,6 @@ const useStyles = makeStyles({
     imageInput: {
         display: 'none',
     },
-    button: {
-        width: '60',
-        height: '50'
-    }
 });
 
 type RecordButtonProps = {
@@ -31,7 +27,7 @@ export default function FileButton({onFileChange, onClick, className}: RecordBut
 
     return (
         <div className={className}>
-            <IconButton onClick={() => onClick(inputFileRef)}>
+            <IconButton onClick={() => onClick(inputFileRef)} sx={{ padding: 0 }}>
                 <UploadFileRoundedIcon fontSize='large'/>
             </IconButton>
             <input type="file" ref={inputFileRef} onChangeCapture={onFileChangeCapture} accept="image/*" className={classes.imageInput} capture="environment"/>

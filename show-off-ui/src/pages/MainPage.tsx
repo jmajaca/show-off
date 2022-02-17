@@ -3,15 +3,15 @@ import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@mui/styles';
 
 import {ProcessState} from '../enums/ProcessState';
-import DeleteButton from '../components/DeleteButton';
+import DeleteButton from '../components/buttons/DeleteButton';
 import {showOffApi} from '../api/show-off/show-off-api';
 import {getHeightAndWidthForImage, resizeFile} from '../utils/ImageResizer';
-import TextPopup from '../components/TextPopup';
-import VideoBackground from '../components/VideoBackground';
-import VideoButton from '../components/VideoButton';
+import TextPopup from '../components/popups/TextPopup';
+import VideoBackground from '../components/backgrounds/VideoBackground';
+import VideoButton from '../components/buttons/VideoButton';
 import {ImageWrapper} from '../types/ImageWrapper';
-import FileButton from '../components/FileButton';
-import ImageBackground from '../components/ImageBackground';
+import FileButton from '../components/buttons/FileButton';
+import ImageBackground from '../components/backgrounds/ImageBackground';
 
 const IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT!);
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     },
     fileButton: {
         position: 'relative',
-        bottom: '7px',
+        left: '10px',
     },
     deleteButton: {
         position: 'absolute',
@@ -116,7 +116,7 @@ export default function MainPage() {
             {image?.source === 'file' && <ImageBackground image={image.image}/>}
             <div className={classes.recordButtonBox}>
                 <VideoButton processState={processState} onClick={onVideoButtonClick}/>
-                <FileButton onFileChange={onFileChange} onClick={onFileButtonClick} className={classes.fileButton}/>
+                {processState === ProcessState.UPLOAD && <FileButton onFileChange={onFileChange} onClick={onFileButtonClick} className={classes.fileButton}/>}
             </div>
             <TextPopup open={popupData.open} text={popupData.text} handleClose={handleTextPopupClose}/>
         </div>

@@ -2,8 +2,9 @@ import React, {createRef, Dispatch, SetStateAction, useEffect, useState} from 'r
 
 import {makeStyles} from '@mui/styles';
 
-import {ProcessState} from '../enums/ProcessState';
-import {ImageWrapper} from '../types/ImageWrapper';
+import {ProcessState} from '../../enums/ProcessState';
+import {ImageWrapper} from '../../types/ImageWrapper';
+import ImageBackground from './ImageBackground';
 
 const useStyles = makeStyles({
     videoWrapper: {
@@ -100,7 +101,7 @@ export default function VideoBackground({processState, image, setImage, classNam
             })
         }
     }
-    // TODO use ImageBackground for this element
+
     return (
         <div className={classes.videoWrapper}>
             {imageURL === "" && <video ref={videoRef} muted autoPlay className={classes.video} />}

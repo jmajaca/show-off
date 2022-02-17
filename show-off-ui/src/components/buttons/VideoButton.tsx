@@ -3,7 +3,7 @@ import React from 'react'
 import {makeStyles} from '@mui/styles';
 import {Button} from '@mui/material';
 
-import {ProcessState} from '../enums/ProcessState';
+import {ProcessState} from '../../enums/ProcessState';
 
 const useStyles = makeStyles({
     button: {
