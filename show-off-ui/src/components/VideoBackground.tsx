@@ -17,7 +17,7 @@ const useStyles = makeStyles({
         height: '100%',
         objectFit: 'cover',
     },
-    hideCanvas: {
+    hide: {
         display: 'none'
     }
 });
@@ -36,8 +36,13 @@ export default function VideoBackground({processState, setImage, className}: Vid
     const videoRef = createRef<HTMLVideoElement>();
     const canvasRef = createRef<HTMLCanvasElement>();
     const photoRef = createRef<HTMLImageElement>();
+    const footerRef = createRef<HTMLDivElement>();
 
-
+    useEffect(() => {
+        if (footerRef.current) {
+            footerRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [footerRef])
 
     useEffect(() => {
         switch (processState) {
@@ -96,8 +101,9 @@ export default function VideoBackground({processState, setImage, className}: Vid
     return (
         <div className={classes.videoWrapper}>
             {imageURL === "" && <video ref={videoRef} muted autoPlay className={classes.video} />}
-            <canvas ref={canvasRef} className={classes.hideCanvas} />
+            <canvas ref={canvasRef} className={classes.hide} />
             {imageURL !== "" && <img className={classes.video} ref={photoRef} alt=""/>}
+            <div ref={footerRef} className={classes.hide}/>
         </div>
     );
 
