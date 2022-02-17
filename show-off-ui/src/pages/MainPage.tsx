@@ -50,6 +50,7 @@ export default function MainPage() {
     const [image, setImage] = useState<ImageWrapper | undefined>();
     const [processState, setProcessState] = useState<ProcessState>(ProcessState.UPLOAD);
     const [popupData, setPopupData] = useState<TextPopupData>({open: false, text: ''});
+    const [sendAnimationFlag, setSendAnimationFlag] = useState<boolean>(false);
     const classes = useStyles();
 
     useEffect(() => {
@@ -58,9 +59,12 @@ export default function MainPage() {
                 showOffApi.readFromImage(resizedImage).then(response => {
                     console.log(response);
                     setPopupData({open: true, text: response.text});
+                    setSendAnimationFlag(false);
                     onDeleteButtonClick();
                 })
             });
+        } if (processState === ProcessState.SEND) {
+            setSendAnimationFlag(true);
         }
     }, [processState]);
 
@@ -115,8 +119,8 @@ export default function MainPage() {
             {image?.source !== 'file' && <VideoBackground processState={processState} image={image} setImage={setImage}/>}
             {image?.source === 'file' && <ImageBackground image={image.image}/>}
             <div className={classes.recordButtonBox}>
-                <VideoButton processState={processState} onClick={onVideoButtonClick}/>
-                {processState === ProcessState.UPLOAD && <FileButton onFileChange={onFileChange} onClick={onFileButtonClick} className={classes.fileButton}/>}
+                <VideoButton processState={processState} sendAnimationFlag={sendAnimationFlag} onClick={onVideoButtonClick}/>
+                <FileButton sendAnimationFlag={sendAnimationFlag} onFileChange={onFileChange} onClick={onFileButtonClick} className={classes.fileButton}/>
             </div>
             <TextPopup open={popupData.open} text={popupData.text} handleClose={handleTextPopupClose}/>
         </div>
