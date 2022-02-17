@@ -18,7 +18,7 @@ type RecordBackgroundProps = {
     className?: string,
 }
 
-export default function RecordBackground({image, className}: RecordBackgroundProps) {
+export default function ImageBackground({image, className}: RecordBackgroundProps) {
 
     const [imageURL, setImageURL] = useState<string>();
     const classes = useStyles();

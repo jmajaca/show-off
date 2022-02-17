@@ -24,11 +24,12 @@ const useStyles = makeStyles({
 
 type VideoBackgroundProps = {
     processState: ProcessState,
+    image: ImageWrapper | undefined,
     setImage: Dispatch<SetStateAction<ImageWrapper | undefined>>,
     className?: string,
 }
 
-export default function VideoBackground({processState, setImage, className}: VideoBackgroundProps) {
+export default function VideoBackground({processState, image, setImage, className}: VideoBackgroundProps) {
 
     const [imageURL, setImageURL] = useState<string>("");
     const classes = useStyles();
@@ -50,7 +51,9 @@ export default function VideoBackground({processState, setImage, className}: Vid
                 setImageURL("");
                 break;
             case ProcessState.SEND:
-                takePicture();
+                if (image === undefined || image.source != 'file') {
+                    takePicture();
+                }
                 break;
             default:
                 break;
@@ -93,11 +96,11 @@ export default function VideoBackground({processState, setImage, className}: Vid
             let data = canvas.toDataURL('image/png');
             setImageURL(data)
             generateBlob().then(blob => {
-                setImage({image: blob, width: canvas.width, height: canvas.height});
+                setImage({image: blob, width: canvas.width, height: canvas.height, source: 'video'});
             })
         }
     }
-
+    // TODO use ImageBackground for this element
     return (
         <div className={classes.videoWrapper}>
             {imageURL === "" && <video ref={videoRef} muted autoPlay className={classes.video} />}

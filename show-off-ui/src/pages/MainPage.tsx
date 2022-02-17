@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
 
 import {makeStyles} from '@mui/styles';
+
 import {ProcessState} from '../enums/ProcessState';
 import DeleteButton from '../components/DeleteButton';
 import {showOffApi} from '../api/show-off/show-off-api';
-import {resizeFile} from '../utils/ImageResizer';
+import {getHeightAndWidthForImage, resizeFile} from '../utils/ImageResizer';
 import TextPopup from '../components/TextPopup';
 import VideoBackground from '../components/VideoBackground';
 import VideoButton from '../components/VideoButton';
 import {ImageWrapper} from '../types/ImageWrapper';
+import FileButton from '../components/FileButton';
+import ImageBackground from '../components/ImageBackground';
 
 const IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT!);
 
@@ -20,9 +23,15 @@ const useStyles = makeStyles({
         height: '100vh',
         position: 'relative',
     },
-    recordButton: {
+    recordButtonBox: {
         position: 'absolute',
-        bottom: '50px'
+        bottom: '50px',
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    fileButton: {
+        position: 'relative',
+        bottom: '7px',
     },
     deleteButton: {
         position: 'absolute',
@@ -48,8 +57,8 @@ export default function MainPage() {
             resizeFile(image!, IMAGE_HEIGHT).then(resizedImage => {
                 showOffApi.readFromImage(resizedImage).then(response => {
                     console.log(response);
-                    setProcessState(ProcessState.UPLOAD);
                     setPopupData({open: true, text: response.text});
+                    onDeleteButtonClick();
                 })
             });
         }
@@ -80,13 +89,35 @@ export default function MainPage() {
         setImage(undefined);
     }
 
+    const onFileButtonClick = (inputRef:  React.RefObject<HTMLInputElement>) => {
+        if (processState === ProcessState.UPLOAD) {
+            inputRef.current!.click();
+        } else if (processState === ProcessState.SEND) {
+            setProcessState(ProcessState.SENDING);
+        }
+    }
+
+    const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files.length !== 0) {
+            const image = event.target.files[0];
+            getHeightAndWidthForImage(image).then(dimensions => {
+                setImage({image: image, width: dimensions.width, height: dimensions.height, source: 'file'});
+                setProcessState(ProcessState.SEND);
+            });
+        }
+    }
+
     return (
         <div className={classes.container}>
             {processState === ProcessState.SEND &&
                 <DeleteButton onClick={onDeleteButtonClick} className={classes.deleteButton}/>
             }
-            <VideoBackground processState={processState} setImage={setImage}/>
-            <VideoButton processState={processState} onClick={onVideoButtonClick} className={classes.recordButton}/>
+            {image?.source !== 'file' && <VideoBackground processState={processState} image={image} setImage={setImage}/>}
+            {image?.source === 'file' && <ImageBackground image={image.image}/>}
+            <div className={classes.recordButtonBox}>
+                <VideoButton processState={processState} onClick={onVideoButtonClick}/>
+                <FileButton onFileChange={onFileChange} onClick={onFileButtonClick} className={classes.fileButton}/>
+            </div>
             <TextPopup open={popupData.open} text={popupData.text} handleClose={handleTextPopupClose}/>
         </div>
     );
