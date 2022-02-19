@@ -3,17 +3,19 @@ import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@mui/styles';
 
 import {ProcessState} from '../enums/ProcessState';
-import DeleteButton from '../components/buttons/DeleteButton';
+import DeleteButton from '../components/button/DeleteButton';
 import {showOffApi} from '../api/show-off/show-off-api';
 import {getHeightAndWidthForImage, resizeFile} from '../utils/ImageResizer';
-import TextPopup from '../components/popups/TextPopup';
-import VideoBackground from '../components/backgrounds/VideoBackground';
-import VideoButton from '../components/buttons/VideoButton';
+import TextPopup from '../components/popup/TextPopup';
+import VideoBackground from '../components/background/VideoBackground';
+import VideoButton from '../components/button/VideoButton';
 import {ImageWrapper} from '../types/ImageWrapper';
-import FileButton from '../components/buttons/FileButton';
-import ImageBackground from '../components/backgrounds/ImageBackground';
+import FileButton from '../components/button/FileButton';
+import ImageBackground from '../components/background/ImageBackground';
+import FullCircularProgressWithLabel from '../components/progress/FullCircularProgressWithLabel';
 
 const IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT!);
+const PROGRESS_CYCLE = parseInt(process.env.REACT_APP_PROGRESS_CYCLE!);
 
 const useStyles = makeStyles({
     container: {
@@ -37,7 +39,11 @@ const useStyles = makeStyles({
         position: 'absolute',
         top: '10px',
         right: '10px',
-    }
+    },
+    progress: {
+        marginTop: '50vh',
+        height: '20%'
+    },
 });
 
 export type TextPopupData = {
@@ -51,14 +57,20 @@ export default function MainPage() {
     const [processState, setProcessState] = useState<ProcessState>(ProcessState.UPLOAD);
     const [popupData, setPopupData] = useState<TextPopupData>({open: false, text: ''});
     const [sendAnimationFlag, setSendAnimationFlag] = useState<boolean>(false);
+    const [progress, setProgress] = useState<number>(0);
+
     const classes = useStyles();
 
     useEffect(() => {
         if (processState === ProcessState.SENDING) {
+            const timer = window.setInterval(() => {
+                setProgress((prevProgress) => (prevProgress > 90 ? prevProgress : prevProgress + 10));
+            }, PROGRESS_CYCLE);
             resizeFile(image!, IMAGE_HEIGHT).then(resizedImage => {
                 showOffApi.readFromImage(resizedImage).then(response => {
-                    console.log(response);
                     setPopupData({open: true, text: response.text});
+                    clearInterval(timer);
+                    setProgress(0);
                     setSendAnimationFlag(false);
                     onDeleteButtonClick();
                 })
@@ -113,6 +125,7 @@ export default function MainPage() {
 
     return (
         <div className={classes.container}>
+            {progress !== 0 && progress !== 100 && <FullCircularProgressWithLabel value={progress} className={classes.progress}/>}
             {processState === ProcessState.SEND &&
                 <DeleteButton onClick={onDeleteButtonClick} className={classes.deleteButton}/>
             }
