@@ -41,7 +41,7 @@ const useStyles = makeStyles({
         right: '10px',
     },
     progress: {
-        marginTop: '50vh',
+        marginTop: '45vh',
         height: '20%'
     },
 });
@@ -64,7 +64,7 @@ export default function MainPage() {
     useEffect(() => {
         if (processState === ProcessState.SENDING) {
             const timer = window.setInterval(() => {
-                setProgress((prevProgress) => (prevProgress > 90 ? prevProgress : prevProgress + 10));
+                setProgress((prevProgress) => (prevProgress >= 90 ? prevProgress : prevProgress + 10));
             }, PROGRESS_CYCLE);
             resizeFile(image!, IMAGE_HEIGHT).then(resizedImage => {
                 showOffApi.readFromImage(resizedImage).then(response => {

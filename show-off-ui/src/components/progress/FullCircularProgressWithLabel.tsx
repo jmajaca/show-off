@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     static: {
         zIndex: 900,
         position: 'absolute', // this should be relative to current component
-        top: '50%',
+        top: '45%',
         //position: 'relative',
         //marginTop: '-86%'
     },
