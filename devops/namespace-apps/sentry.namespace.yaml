@@ -1,20 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: show-off
+  name: sentry
   namespace: argocd
 spec:
-  project: show-off
+  project: sentry
   source:
     directory:
       jsonnet: { }
       recurse: true
     repoURL: git@github.com:jmajaca/show-off.git
     targetRevision: devops
-    path: devops/administration/show-off
+    path: devops/administration/sentry
   destination:
     server: https://kubernetes.default.svc
-    namespace: show-off
+    namespace: sentry
   syncPolicy:
     automated: { }
     syncOptions:
