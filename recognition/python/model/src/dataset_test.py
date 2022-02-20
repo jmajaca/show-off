@@ -1,7 +1,7 @@
 from torch.utils.data import DataLoader
 
-from dataset.SynthPadCollator import SynthPadCollator
-from dataset.SynthDataset import SynthDataset
+from dataset.synth.SynthPadCollator import SynthPadCollator
+from dataset.synth.SynthDataset import SynthDataset
 
 import numpy as np
 import matplotlib.pyplot as plt

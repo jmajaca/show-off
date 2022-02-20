@@ -1,9 +1,11 @@
 import torch
 from PIL import Image
-from torchvision.transforms import transforms
+from torch.utils.data import DataLoader
 
 import model_env
 from dataset.OCRLabelConverter import OCRLabelConverter
+from dataset.real.RealUnlabeledDataset import RealDataset
+from dataset.real.RealUnlabeledPadCollator import RealPadCollator
 from model.CRNN import CRNN
 from model_utils import prepare_prediction_for_conversion
 
@@ -17,22 +19,15 @@ class ModelWrapper:
         self.model.to(self.device)
         self.model.eval()
         self.converter = OCRLabelConverter(model_env.alphabet)
-        self.transform = transforms.Compose([
-            transforms.Grayscale(num_output_channels=1),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5,), (0.5,))
-        ])
+        self.collate_fn = RealPadCollator()
 
     def get_text(self, images: list[Image]) -> str:
-        transformed_images: list[torch.Tensor] = []
-        for image in images:
+        for i, image in enumerate(images):
             if image.height != 32:
                 new_width = 32 * image.width / image.height
-                image = image.resize((new_width, 32), Image.ANTIALIAS)
-            image = self.transform(image)
-            transformed_images.append(image)
-        tensor = transformed_images[0].unsqueeze(0).to(self.device)
-        if len(transformed_images) != 1:
-            pass
-        prediction = self.model(tensor)
-        return self.converter.decode(*prepare_prediction_for_conversion(prediction))
+                images[i] = image.resize((new_width, 32), Image.ANTIALIAS)
+        dataset = RealDataset(images=images)
+        dataloader = DataLoader(dataset=dataset, collate_fn=self.collate_fn, batch_size=len(images))
+        for data in dataloader:
+            prediction = self.model(data)
+            return self.converter.decode(*prepare_prediction_for_conversion(prediction))

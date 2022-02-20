@@ -6,8 +6,8 @@ import model_env
 from OCREvaluator import OCREvaluator
 from OCRTrainer import OCRTrainer
 from dataset.OCRLabelConverter import OCRLabelConverter
-from dataset.SynthDataset import SynthDataset
-from dataset.SynthPadCollator import SynthPadCollator
+from dataset.synth.SynthDataset import SynthDataset
+from dataset.synth.SynthPadCollator import SynthPadCollator
 from model.CRNN import CRNN
 
 

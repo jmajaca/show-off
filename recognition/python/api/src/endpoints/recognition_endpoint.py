@@ -20,12 +20,11 @@ def extract():
           description: Text was successfully extracted from images
     """
     files: dict[str, FileStorage] = request.files.to_dict()
-    texts: list[str] = []
     keys: list[str] = sorted([key for key in files.keys()])
+    images: list[FileStorage] = [files[key] for key in keys]
     for key in keys:
         if not key.startswith('image'):
             # log warning
             print('Invalid key:', key)
-            continue
-        texts.append(recognition_service.get_text_from_image(files[key]))
-    return {'tokens': texts}, 200
+            raise Exception()
+    return {'tokens': recognition_service.get_text_from_images(images)}, 200

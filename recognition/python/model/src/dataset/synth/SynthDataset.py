@@ -5,7 +5,7 @@ from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
 from torchvision.transforms import transforms
 
-from python.model.src.dataset.SynthDatasetInstance import SynthDatasetInstance
+from dataset.synth.SynthDatasetInstance import SynthDatasetInstance
 
 
 class SynthDataset(Dataset):
