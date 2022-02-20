@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: show-off-api
+  labels:
+    app: show-off-api
+    type: backend-python
+spec:
+  selector:
+    matchLabels:
+      app: show-off-api
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: show-off-api
+        type: frontend
+    spec:
+      containers:
+      - name: show-off-api
+        image: spaladium/show-off-api
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 5

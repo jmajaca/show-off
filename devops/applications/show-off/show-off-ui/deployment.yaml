@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: show-off-ui
+  labels:
+    app: show-off-ui
+    type: frontend
+spec:
+  selector:
+    matchLabels:
+      app: show-off-ui
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: show-off-ui
+        type: frontend
+    spec:
+      containers:
+      - name: show-off-ui
+        image: spaladium/show-off-ui
+        ports:
+        - containerPort: 3000
