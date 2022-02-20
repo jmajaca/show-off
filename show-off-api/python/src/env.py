@@ -1,0 +1,4 @@
+import os
+
+DETECTION_API_URL = os.environ['DETECTION_API_URL']
+RECOGNITION_API_URL = os.environ['RECOGNITION_API_URL']
