@@ -1,12 +1,12 @@
 from flask import Blueprint, request
 from werkzeug.datastructures import FileStorage
 
-import api_env
+import env_api
 from recognition_service import RecognitionService
 
 recognition_endpoint = Blueprint('recognition_endpoint', __name__)
 
-recognition_service = RecognitionService(api_env.model_weights_path)
+recognition_service = RecognitionService(env_api.model_weights_path)
 
 
 @recognition_endpoint.route('/extract', methods=['POST'])

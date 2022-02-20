@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from python.model.src.model.BidirectionalLSTM import BidirectionalLSTM
+from model.BidirectionalLSTM import BidirectionalLSTM
 
 
 class CRNN(nn.Module):

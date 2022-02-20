@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 from torch.optim.adam import Adam
 
-import model_env
+import env_model
 from OCREvaluator import OCREvaluator
 from OCRTrainer import OCRTrainer
 from dataset.OCRLabelConverter import OCRLabelConverter
