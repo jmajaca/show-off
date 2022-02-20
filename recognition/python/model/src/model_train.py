@@ -21,14 +21,14 @@ def load_data(train_validation_ratio=0.7) -> tuple[DataLoader, DataLoader, DataL
 
 
 def main():
-    alphabet = model_env.alphabet
+    alphabet = env_model.alphabet
     train_dataloader, validation_dataloader, test_dataloader = load_data()
     converter = OCRLabelConverter(alphabet)
     model = CRNN(class_num=len(alphabet))
     model.to(torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'))
     optimizer = Adam(params=model.parameters(), lr=1e-3)
     trainer = OCRTrainer(model, optimizer, converter=converter)
-    trainer.train(train_dataloader, train_dataloader, epoch_num=6)
+    trainer.train(train_dataloader, train_dataloader, epoch_num=30)
 
     truths, predictions = [], []
     for element, label in test_dataloader:
@@ -42,7 +42,7 @@ def main():
         pos = pos.transpose(1, 0).contiguous().view(-1)
 
         pred_label = converter.decode(pos.data, pred_sizes.data)
-        print(f'label={label[0]}, predicted_label={pred_label}')
+        # print(f'label={label[0]}, predicted_label={pred_label}')
         truths.append(label[0])
         predictions.append(pred_label)
     print(f'Word accuracy: {OCREvaluator.word_accuracy(truths, predictions)}')
