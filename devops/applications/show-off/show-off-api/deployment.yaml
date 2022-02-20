@@ -26,6 +26,11 @@ spec:
               configMapKeyRef:
                 name: internal-urls
                 key: detection_api_url
+          - name: RECOGNITION_API_URL
+            valueFrom:
+              configMapKeyRef:
+                name: internal-urls
+                key: recognition_api_url
         ports:
         - containerPort: 5000
         readinessProbe:
