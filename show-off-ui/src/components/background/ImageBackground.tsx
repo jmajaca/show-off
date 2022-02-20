@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 import {makeStyles} from '@mui/styles';
 
-import background from '../assets/background.png'
+import background from '../../assets/background.png'
 
 const useStyles = makeStyles({
     image: {
@@ -18,7 +18,7 @@ type RecordBackgroundProps = {
     className?: string,
 }
 
-export default function RecordBackground({image, className}: RecordBackgroundProps) {
+export default function ImageBackground({image, className}: RecordBackgroundProps) {
 
     const [imageURL, setImageURL] = useState<string>();
     const classes = useStyles();

@@ -1,10 +1,15 @@
 import React from 'react';
+
+import {BrowserRouter} from 'react-router-dom';
+
 import './App.css';
-import MainPage from "./pages/MainPage";
+import AppRoutes from './AppRoutes';
 
 function App() {
   return (
-    <MainPage/>
+      <BrowserRouter basename="/show-off">
+        <AppRoutes/>
+      </BrowserRouter>
   );
 }
 

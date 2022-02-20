@@ -4,7 +4,7 @@ WORKDIR app
 
 COPY . .
 
-RUN yarn install && yarn build && yarn global add serve
+RUN yarn install && yarn "build:prod" && yarn global add serve
 
 EXPOSE 3000
 
