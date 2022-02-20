@@ -39,4 +39,8 @@ kubectl delete pod "$(kubectl get pods | grep argocd-application* | cut -d" " -f
 
 # todo auto create Argo CRD after arm64 command in version 2.3
 echo 'Admin password is':
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+kubectl get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+
+echo 'Change password, connect git repo, create Application platform and AppProject argocd, sync.'
+
+kubectl config set-context --current --namespace=default
