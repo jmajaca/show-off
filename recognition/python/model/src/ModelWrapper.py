@@ -30,4 +30,8 @@ class ModelWrapper:
         dataloader = DataLoader(dataset=dataset, collate_fn=self.collate_fn, batch_size=len(images))
         for data in dataloader:
             prediction = self.model(data)
-            return self.converter.decode(*prepare_prediction_for_conversion(prediction))
+            results = self.converter.decode(*prepare_prediction_for_conversion(prediction))
+            if len(results) == 1:
+                return [results]
+            else:
+                return results
