@@ -21,7 +21,7 @@ spec:
       - name: recognition-api
         image: spaladium/recognition-api
         env:
-          - name: CTPN_WEIGHTS_FILE
+          - name: MODEL_WEIGHTS_PATH
             value: /config/weights/CRNN.pth
         volumeMounts:
           - mountPath: /config/weights/
