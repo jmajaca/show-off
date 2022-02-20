@@ -5,6 +5,7 @@ on:
     branches:
       - 'frontend'
       - 'show-off-api'
+      - 'ocr-model'
 
 jobs:
   build:
