@@ -24,7 +24,7 @@ class ModelWrapper:
     def get_text(self, images: list[Image]) -> list[str]:
         for i, image in enumerate(images):
             if image.height != 32:
-                new_width = 32 * image.width / image.height
+                new_width = int(32 * image.width / image.height)
                 images[i] = image.resize((new_width, 32), Image.ANTIALIAS)
         dataset = RealDataset(images=images)
         dataloader = DataLoader(dataset=dataset, collate_fn=self.collate_fn, batch_size=len(images))
