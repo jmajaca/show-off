@@ -7,6 +7,7 @@ from werkzeug.datastructures import FileStorage
 
 import env
 from models.detection_api import TextBox, MinimalTextBox
+from models.recognition_api import RecognitionResponse
 
 
 class PayloadType(Enum):
@@ -41,3 +42,14 @@ class DetectionAPI(API):
     def get_minimal_text_boxes(self, image: FileStorage) -> list[MinimalTextBox]:
         response = self.post(path='/minimal-boxes', payload={'image': image}, content_type=PayloadType.FILE)
         return [MinimalTextBox(**element) for element in response.json()]
+
+
+class RecognitionAPI(API):
+
+    def __init__(self):
+        super().__init__(env.RECOGNITION_API_URL)
+
+    def extract_text(self, images: list) -> RecognitionResponse:
+        payload = {f'image{i}': image for i, image in enumerate(images)}
+        response = self.post(path='/extract', payload=payload, content_type=PayloadType.FILE)
+        return RecognitionResponse(**response.json())
