@@ -6,12 +6,14 @@ on:
       - 'frontend'
       - 'show-off-api'
       - 'detection'
+      - 'ocr-model'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if project is show-off-ui
+      -
+        name: Check if project is show-off-ui
         if: github.ref_name == 'frontend'
         run: |
           echo "PROJECT=show-off-ui" >> $GITHUB_ENV
@@ -22,6 +24,12 @@ jobs:
         run: |
           echo "PROJECT=show-off-api" >> $GITHUB_ENV
           echo "PROJECT_CONTEXT=show-off-api/python" >> $GITHUB_ENV
+      -
+        name: Check if project is recognition-api
+        if: github.ref_name == 'ocr-model'
+        run: |
+          echo "PROJECT=recognition-api" >> $GITHUB_ENV
+          echo "PROJECT_CONTEXT=recognition/python" >> $GITHUB_ENV
       -
         name: Check if project is detection-api
         if: github.ref_name == 'detection'
