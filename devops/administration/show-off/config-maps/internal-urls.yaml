@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: internal-urls
 data:
-  detection_api_url: "http://152.67.65.49:5001"
+  detection_api_url: "http://jmajaca.xyz:5001"
+  recognition_api_url: "http://jmajaca.xyz:5002"
