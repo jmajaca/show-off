@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 from torch.optim.adam import Adam
 
+import model_env
 from OCREvaluator import OCREvaluator
 from OCRTrainer import OCRTrainer
 from dataset.OCRLabelConverter import OCRLabelConverter
@@ -11,8 +12,8 @@ from model.CRNN import CRNN
 
 
 def load_data(train_validation_ratio=0.7) -> tuple[DataLoader, DataLoader, DataLoader]:
-    train_dataset = SynthDataset(dir_path='data/train')
-    test_dataset = SynthDataset(dir_path='data/test')
+    train_dataset = SynthDataset(dir_path='../data/train')
+    test_dataset = SynthDataset(dir_path='../data/test')
     pad_collator = SynthPadCollator()
     train_dataloader = DataLoader(dataset=train_dataset, collate_fn=pad_collator, batch_size=32, shuffle=True)
     test_dataloader = DataLoader(dataset=test_dataset, collate_fn=pad_collator, batch_size=1, shuffle=True)
@@ -20,7 +21,7 @@ def load_data(train_validation_ratio=0.7) -> tuple[DataLoader, DataLoader, DataL
 
 
 def main():
-    alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "-"
+    alphabet = model_env.alphabet
     train_dataloader, validation_dataloader, test_dataloader = load_data()
     converter = OCRLabelConverter(alphabet)
     model = CRNN(class_num=len(alphabet))
@@ -46,6 +47,7 @@ def main():
         predictions.append(pred_label)
     print(f'Word accuracy: {OCREvaluator.word_accuracy(truths, predictions)}')
     print(f'Word similarity: {OCREvaluator.word_sim(truths, predictions)}')
+    torch.save(model.state_dict(), '../data/result/CRNN.pth')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 import torch.nn.utils.rnn
 
-from dataset.SynthDatasetInstance import SynthDatasetInstance
+from python.model.src.dataset.SynthDatasetInstance import SynthDatasetInstance
 
 
 class SynthPadCollator:

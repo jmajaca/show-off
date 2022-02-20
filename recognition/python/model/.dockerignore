@@ -1,0 +1,10 @@
+README.md
+.dockerignore
+requirments_train.txt
+data
+scripts
+src/dataset
+src/dataset_test.py
+src/model_train.py
+src/OCREvaluator.py
+src/OCRTrainer.py
