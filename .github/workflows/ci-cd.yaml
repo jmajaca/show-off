@@ -5,6 +5,7 @@ on:
     branches:
       - 'frontend'
       - 'show-off-api'
+      - 'ocr-model'
 
 jobs:
   build:
@@ -21,6 +22,11 @@ jobs:
         run: |
           echo "PROJECT=show-off-api" >> $GITHUB_ENV
           echo "PROJECT_CONTEXT=show-off-api/python" >> $GITHUB_ENV
+      - name: Check if project is recognition-api
+        if: github.ref_name == 'ocr-model'
+        run: |
+          echo "PROJECT=recognition-api" >> $GITHUB_ENV
+          echo "PROJECT_CONTEXT=recognition/python" >> $GITHUB_ENV
       -
         id: current_project
         name: Sharing current project with other jobs
