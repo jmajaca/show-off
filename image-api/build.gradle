@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+group 'hr.show'
+version '1.0-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+
+}
+
+test {
+    useJUnitPlatform()
+}
