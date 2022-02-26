@@ -6,6 +6,11 @@ spring:
     driverClassName: org.h2.Driver
   jpa:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+  rabbitmq:
+    port: 5672
+    host: localhost
+    password: guest
+    username: guest
 
 server:
   port: 8088

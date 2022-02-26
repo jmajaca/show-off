@@ -10,4 +10,6 @@ public interface ImageService {
 
     Optional<ImageDto> getImage(String imageId);
 
+    void saveTextCorrection(String imageId, String value);
+
 }
