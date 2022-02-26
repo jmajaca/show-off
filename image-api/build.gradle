@@ -1,5 +1,12 @@
+/*buildscript {
+    dependencies {
+        classpath "com.webcohesion.enunciate:enunciate-lombok:2.13.3"
+    }
+}*/
+
 plugins {
     id 'java'
+    id 'com.webcohesion.enunciate' version '2.13.3'
     id 'org.springframework.boot' version '2.6.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
@@ -17,6 +24,14 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+
+    implementation group: 'org.liquibase', name: 'liquibase-core', version: '4.8.0'
+    runtimeOnly group: 'com.h2database', name: 'h2', version: '2.1.210'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+
+    implementation group: 'org.zalando', name: 'logbook-spring-boot-starter', version: '2.14.0'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 

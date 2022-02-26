@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: jmajaca
+      changes:
+        - createTable:
+            tableName: image
+            columns:
+              - column:
+                  name: id
+                  type: varchar(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: path
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: creation_timestamp
+                  type: timestamp
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: image_box
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: start_x
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: width
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: height
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar(512)
+              - column:
+                  name: image_id
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: image_image_box_foregin_key
+                    references: image(id)
+        - createTable:
+            tableName: text_correction
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: value
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_id
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: image_text_correction_foregin_key
+                    references: image(id)

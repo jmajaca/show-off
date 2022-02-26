@@ -1,2 +1,11 @@
-server:
-  port: 8088
+spring:
+  liquibase:
+    enabled: true
+
+logbook:
+  include:
+    - /api/**
+
+logging:
+  level:
+    org.zalando.logbook: TRACE

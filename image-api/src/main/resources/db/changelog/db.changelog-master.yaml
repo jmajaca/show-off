@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/data/001-tables.yaml
+  - include:
+      file: db/changelog/data/002-core-data.yaml
+  - include:
+      file: db/changelog/data/003-test-data.yaml
