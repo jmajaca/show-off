@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/api/image")
 public class ImageController {
@@ -32,7 +34,7 @@ public class ImageController {
      * @HTTP 500 For all others cases
      * */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ImageDto> getImage(@PathVariable("id") String imageId) {
+    public ResponseEntity<ImageDto> getImage(@PathVariable("id") @Valid String imageId) {
         return ResponseEntity.of(imageService.getImage(imageId));
     }
 

@@ -9,6 +9,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
+
 @Component
 public class ImageQueueListener {
 
@@ -22,7 +24,7 @@ public class ImageQueueListener {
     }
 
     @RabbitListener(queues = "imageQueue")
-    public void receiveImage(ImageDto image) {
+    public void receiveImage(@Valid ImageDto image) {
         log.info("Received image with id {} from image queue", image.getId());
         try {
             imageService.saveImage(image);
@@ -32,7 +34,7 @@ public class ImageQueueListener {
     }
 
     @RabbitListener(queues = "textCorrectionQueue")
-    public void receiveTextCorrection(TextCorrectionDto correctionDto) {
+    public void receiveTextCorrection(@Valid TextCorrectionDto correctionDto) {
         log.info("Received text correction for image with id {} from text correction queue", correctionDto.getImageId());
         try {
             imageService.saveTextCorrection(correctionDto.getImageId(), correctionDto.getValue());

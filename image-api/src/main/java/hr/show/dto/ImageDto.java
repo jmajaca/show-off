@@ -1,26 +1,27 @@
 package hr.show.dto;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@RequiredArgsConstructor
+/**
+ * Image Dto
+ * @author jmajaca
+ * */
+@Data
 public class ImageDto {
 
+    @NotEmpty(message = "id is required")
     private String id;
 
+    @NotNull(message = "file must not be null")
     private File file;
 
+    @NotNull(message = "creation date must not be null")
     private LocalDateTime creationDate;
 
     private List<ImageBoxDto> boxes;
