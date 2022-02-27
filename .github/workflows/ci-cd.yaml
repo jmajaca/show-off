@@ -7,6 +7,7 @@ on:
       - 'show-off-api'
       - 'detection'
       - 'ocr-model'
+      - 'image-api'
 
 jobs:
   build:
@@ -18,24 +19,35 @@ jobs:
         run: |
           echo "PROJECT=show-off-ui" >> $GITHUB_ENV
           echo "PROJECT_CONTEXT=show-off-ui" >> $GITHUB_ENV
+          echo "LANGUAGE=typescript" >> $GITHUB_ENV
       -
         name: Check if project is show-off-api
         if: github.ref_name == 'show-off-api'
         run: |
           echo "PROJECT=show-off-api" >> $GITHUB_ENV
           echo "PROJECT_CONTEXT=show-off-api/python" >> $GITHUB_ENV
+          echo "LANGUAGE=python" >> $GITHUB_ENV
       -
         name: Check if project is recognition-api
         if: github.ref_name == 'ocr-model'
         run: |
           echo "PROJECT=recognition-api" >> $GITHUB_ENV
           echo "PROJECT_CONTEXT=recognition/python" >> $GITHUB_ENV
+          echo "LANGUAGE=python" >> $GITHUB_ENV
       -
         name: Check if project is detection-api
         if: github.ref_name == 'detection'
         run: |
           echo "PROJECT=detection-api" >> $GITHUB_ENV
           echo "PROJECT_CONTEXT=detection/python" >> $GITHUB_ENV
+          echo "LANGUAGE=python" >> $GITHUB_ENV
+      -
+        name: Check if project is image-api
+        if: github.ref_name == 'image-api'
+        run: |
+          echo "PROJECT=image-api" >> $GITHUB_ENV
+          echo "PROJECT_CONTEXT=image-api" >> $GITHUB_ENV
+          echo "LANGUAGE=java" >> $GITHUB_ENV
       -
         id: current_project
         name: Sharing current project with other jobs
@@ -45,6 +57,16 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.ref_name }}
+      -
+        name: Set up JDK
+        if: ${{ env.LANGUAGE }} == 'java'
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+      -
+        name: Gradle build
+        if: ${{ env.LANGUAGE }} == 'java'
+        run: cd ${{ env.PROJECT_CONTEXT }} && ./gradlew build && java -jar build/libs/gs-spring-boot-docker-0.1.0.jar
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
