@@ -62,7 +62,9 @@ jobs:
         if: ${{ env.LANGUAGE }} == 'java'
         uses: actions/setup-java@v2
         with:
+          distribution: 'microsoft'
           java-version: '17'
+          cache: 'gradle'
       -
         name: Gradle build
         if: ${{ env.LANGUAGE }} == 'java'
