@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class ImageDto {
     private String id;
 
     @NotNull(message = "file must not be null")
-    private File file;
+    private BufferedImage file;
 
     @NotNull(message = "creation date must not be null")
     private LocalDateTime creationDate;

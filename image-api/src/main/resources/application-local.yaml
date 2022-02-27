@@ -12,5 +12,9 @@ spring:
     password: guest
     username: guest
 
+file:
+  path: /tmp/files
+  max-age: 7
+
 server:
   port: 8088

@@ -25,7 +25,7 @@ public class ImageQueueListener {
 
     @RabbitListener(queues = "imageQueue")
     public void receiveImage(@Valid ImageDto image) {
-        log.info("Received image with id {} from image queue", image.getId());
+        log.info("Received image with id '{}' from image queue", image.getId());
         try {
             imageService.saveImage(image);
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class ImageQueueListener {
 
     @RabbitListener(queues = "textCorrectionQueue")
     public void receiveTextCorrection(@Valid TextCorrectionDto correctionDto) {
-        log.info("Received text correction for image with id {} from text correction queue", correctionDto.getImageId());
+        log.info("Received text correction for image with id '{}' from text correction queue", correctionDto.getImageId());
         try {
             imageService.saveTextCorrection(correctionDto.getImageId(), correctionDto.getValue());
         } catch (Exception e) {
