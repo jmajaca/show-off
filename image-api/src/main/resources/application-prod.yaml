@@ -12,8 +12,9 @@ spring:
   rabbitmq:
     port: 5672
     host: rabbit-mq.show-off-infra.svc.cluster.local
-    password: admin
-    username: password
+    username: image-api
+    password: password
+    virtual-host: show-off
 
 file:
   path: /tmp/files
