@@ -10,7 +10,7 @@ spec:
   ports:
   - port: 8080
     targetPort: 8080
-    nodePort: 30003
+    nodePort: 30004
     protocol: TCP
   selector:
     app: image-api
