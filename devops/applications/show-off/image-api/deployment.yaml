@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-api
+  labels:
+    app: image-api
+    type: backend-java
+spec:
+  selector:
+    matchLabels:
+      app: image-api
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: image-api
+        type: backend-java
+    spec:
+      containers:
+      - name: image-api
+        image: spaladium/image-api
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: prod
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 5
