@@ -18,7 +18,7 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
 
     @Bean
     public Queue textCorrectionQueue() {
-        return new Queue("textCorrection");
+        return new Queue("textCorrectionQueue");
     }
 
     @Bean
