@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    hikari:
+      jdbc-url: jdbc:postgresql://postgre-db.show-off-infra.svc.cluster.local:5432/show-off
+      pool-name: HikariPool-POSTGRE
+      maximum-pool-size: 3
+      username: postgre
+      password: password
+      driver-class-name: org.postgresql.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+  rabbitmq:
+    port: 5672
+    host: rabbit-mq.show-off-infra.svc.cluster.local
+    password: admin
+    username: password
+
+file:
+  path: /tmp/files
+  max-age: 7

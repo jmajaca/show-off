@@ -30,6 +30,7 @@ dependencies {
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
 
     implementation group: 'org.liquibase', name: 'liquibase-core', version: '4.8.0'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.3'
     runtimeOnly group: 'com.h2database', name: 'h2', version: '2.1.210'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'

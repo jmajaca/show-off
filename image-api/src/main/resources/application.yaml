@@ -3,8 +3,8 @@ spring:
     enabled: true
 
 logbook:
-  include:
-    - /api/**
+  exclude:
+    - '**/actuator/**'
 
 logging:
   level:
