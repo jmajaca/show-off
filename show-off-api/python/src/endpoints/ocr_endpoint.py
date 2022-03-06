@@ -48,6 +48,7 @@ def read_image():
     except ImageDimensionsTooLargeError as e:
         logging.error('Invalid image', e)
         return {'timestamp': datetime.now(), 'error': str(e)}, 400
+    queue_service.send_image(request_id, image)
     text_boxes = detection_api.get_minimal_text_boxes(image)
     images = []
     for i, box in enumerate(text_boxes):
@@ -57,7 +58,7 @@ def read_image():
         images.append(io.BytesIO(buffer))
     extracted_text = recognition_api.extract_text(images)
     text = ' '.join(extracted_text.tokens)
-    queue_service.send_image_data(request_id, image, text_boxes, text, env.IMAGE_QUEUE_NAME)
+    queue_service.send_image_data(request_id, text_boxes, text)
     return {'id': request_id, 'text': text}, 200
 
 

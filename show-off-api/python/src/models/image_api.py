@@ -14,6 +14,12 @@ class ImageBoxData:
 class ImageData:
 
     id: str
-    file: str
     box: list[ImageBoxData]
+    text: str
+
+
+@dataclass
+class TextCorrection:
+
+    id: str
     text: str
