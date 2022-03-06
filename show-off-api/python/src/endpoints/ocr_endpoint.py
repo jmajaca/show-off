@@ -1,19 +1,24 @@
 import io
 import logging
+import uuid
 from datetime import datetime
 
 import cv2
 from flask import Blueprint, request
 from flask_cors import cross_origin
 
+import env
 from api.api import DetectionAPI, RecognitionAPI
 from exceptions.exceptions import ImageDimensionsTooLargeError
 from services.image_service import ImageService
+from services.queue_service import QueueService
 
 ocr_endpoint = Blueprint('ocr_endpoint', __name__)
 
 detection_api = DetectionAPI()
 recognition_api = RecognitionAPI()
+
+queue_service = QueueService()
 
 
 @ocr_endpoint.route('/read', methods=['POST'])
@@ -34,6 +39,7 @@ def read_image():
         400:
           description: Image is not acceptable
     """
+    request_id = uuid.uuid4().__str__()
     files = request.files.to_dict()
     image = files['image']
     cv2_image = ImageService.cv2_convert(image)
@@ -50,7 +56,9 @@ def read_image():
         is_success, buffer = cv2.imencode('.jpg', cut_image)
         images.append(io.BytesIO(buffer))
     extracted_text = recognition_api.extract_text(images)
-    return {'text': ' '.join(extracted_text.tokens)}, 200
+    text = ' '.join(extracted_text.tokens)
+    queue_service.send_image_data(request_id, image, text_boxes, text, env.IMAGE_QUEUE_NAME)
+    return {'id': request_id, 'text': text}, 200
 
 
 @ocr_endpoint.route('/correct-text', methods=['POST'])
