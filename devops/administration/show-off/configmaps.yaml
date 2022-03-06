@@ -14,7 +14,7 @@ items:
       name: queues
     data:
       host: rabbit-mq.show-off-infra.svc.cluster.local
-      port: 5672
+      port: '5672'
       virtual_host: show-off
       exchange: ''
       image_queue: imageQueue
