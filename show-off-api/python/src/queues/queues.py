@@ -27,14 +27,14 @@ class Queue(ABC):
         self.queue = queue
         self.exchange = exchange
 
-    def __send_json(self, payload: dict, headers: dict):
+    def _send_json(self, payload: dict, headers: dict):
         connection = pika.BlockingConnection(self.__connection_params)
         channel = connection.channel()
         channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=json.dumps(payload),
                               properties=pika.BasicProperties(content_type='application/json', headers=headers))
         connection.close()
 
-    def __send_bytes(self, payload: bytes, headers: dict):
+    def _send_bytes(self, payload: bytes, headers: dict):
         connection = pika.BlockingConnection(self.__connection_params)
         channel = connection.channel()
         channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=payload,
@@ -53,7 +53,7 @@ class ImageQueue(Queue):
 
     def send(self, payload: bytes, headers: dict):
         try:
-            self.__send_bytes(payload, headers)
+            self._send_bytes(payload, headers)
         except Exception as e:
             log.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
                       exc_info=True)
@@ -66,7 +66,7 @@ class ImageDataQueue(Queue):
 
     def send(self, payload: ImageData, headers: dict):
         try:
-            self.__send_json(dataclasses.asdict(payload), headers)
+            self._send_json(dataclasses.asdict(payload), headers)
         except Exception as e:
             log.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
                       exc_info=True)
@@ -79,7 +79,7 @@ class TextCorrectionQueue(Queue):
 
     def send(self, payload: TextCorrection, headers: dict):
         try:
-            self.__send_json(dataclasses.asdict(payload), headers)
+            self._send_json(dataclasses.asdict(payload), headers)
         except Exception as e:
             log.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
                       exc_info=True)
