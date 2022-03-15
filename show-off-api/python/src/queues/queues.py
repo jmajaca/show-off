@@ -9,6 +9,9 @@ import env
 from models.image_api import ImageData, TextCorrection
 
 
+log = logging.getLogger(__name__)
+
+
 class Queue(ABC):
 
     def __init__(self, queue: str, exchange: str = ''):
@@ -24,14 +27,14 @@ class Queue(ABC):
         self.queue = queue
         self.exchange = exchange
 
-    def _send_json(self, payload: dict, headers: dict):
+    def __send_json(self, payload: dict, headers: dict):
         connection = pika.BlockingConnection(self.__connection_params)
         channel = connection.channel()
         channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=json.dumps(payload),
                               properties=pika.BasicProperties(content_type='application/json', headers=headers))
         connection.close()
 
-    def _send_bytes(self, payload: bytes, headers: dict):
+    def __send_bytes(self, payload: bytes, headers: dict):
         connection = pika.BlockingConnection(self.__connection_params)
         channel = connection.channel()
         channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=payload,
@@ -50,10 +53,10 @@ class ImageQueue(Queue):
 
     def send(self, payload: bytes, headers: dict):
         try:
-            self._send_bytes(payload, headers)
+            self.__send_bytes(payload, headers)
         except Exception as e:
-            logging.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
-                          exc_info=True)
+            log.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
+                      exc_info=True)
 
 
 class ImageDataQueue(Queue):
@@ -63,10 +66,10 @@ class ImageDataQueue(Queue):
 
     def send(self, payload: ImageData, headers: dict):
         try:
-            self._send_json(dataclasses.asdict(payload), headers)
+            self.__send_json(dataclasses.asdict(payload), headers)
         except Exception as e:
-            logging.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
-                          exc_info=True)
+            log.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
+                      exc_info=True)
 
 
 class TextCorrectionQueue(Queue):
@@ -76,7 +79,7 @@ class TextCorrectionQueue(Queue):
 
     def send(self, payload: TextCorrection, headers: dict):
         try:
-            self._send_json(dataclasses.asdict(payload), headers)
+            self.__send_json(dataclasses.asdict(payload), headers)
         except Exception as e:
-            logging.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
-                          exc_info=True)
+            log.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
+                      exc_info=True)

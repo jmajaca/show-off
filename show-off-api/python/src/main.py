@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from apispec import APISpec
@@ -10,6 +11,10 @@ from flask_cors import CORS
 from endpoints.doc_endpoint import doc_endpoint
 from endpoints.health_endpoint import health_endpoint, check_health
 from endpoints.ocr_endpoint import ocr_endpoint, read_image
+
+logging.basicConfig(level=logging.INFO)
+
+log = logging.getLogger(__name__)
 
 spec = APISpec(
     title='Show Off API',

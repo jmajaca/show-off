@@ -7,13 +7,14 @@ import cv2
 from flask import Blueprint, request
 from flask_cors import cross_origin
 
-import env
 from api.api import DetectionAPI, RecognitionAPI
 from exceptions.exceptions import ImageDimensionsTooLargeError
 from services.image_service import ImageService
 from services.queue_service import QueueService
 
 ocr_endpoint = Blueprint('ocr_endpoint', __name__)
+
+log = logging.getLogger(__name__)
 
 detection_api = DetectionAPI()
 recognition_api = RecognitionAPI()
@@ -46,7 +47,7 @@ def read_image():
     try:
         ImageService.check_dimensions(cv2_image)
     except ImageDimensionsTooLargeError as e:
-        logging.error('Invalid image', e)
+        log.error('Invalid image', e)
         return {'timestamp': datetime.now(), 'error': str(e)}, 400
     queue_service.send_image(request_id, image)
     text_boxes = detection_api.get_minimal_text_boxes(image)
