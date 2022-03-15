@@ -1,24 +1,19 @@
 package hr.show.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.Hibernate;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
 @RequiredArgsConstructor
 @Entity
 public class Image {
@@ -34,9 +29,22 @@ public class Image {
     private LocalDateTime creationTimestamp;
 
     @OneToMany(mappedBy="image", cascade = CascadeType.REFRESH)
+    @ToString.Exclude
     private List<ImageBox> boxes;
 
     @OneToOne(mappedBy="image", cascade = CascadeType.REFRESH)
     private TextCorrection textCorrection;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Image image = (Image) o;
+        return id != null && Objects.equals(id, image.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

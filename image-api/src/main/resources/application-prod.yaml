@@ -7,8 +7,6 @@ spring:
       username: postgres
       password: password
       driver-class-name: org.postgresql.Driver
-  jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
   rabbitmq:
     port: 5672
     host: rabbit-mq.show-off-infra.svc.cluster.local

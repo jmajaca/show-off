@@ -1,8 +1,10 @@
 package hr.show.service.impl;
 
 import hr.show.configuration.FileProperties;
+import hr.show.message.ImageDataQueueMessage;
 import hr.show.dto.ImageDto;
 import hr.show.exception.NoEntityException;
+import hr.show.mapper.ImageDataQueueDtoToImageMapper;
 import hr.show.model.Image;
 import hr.show.model.TextCorrection;
 import hr.show.repository.ImageRepository;
@@ -12,9 +14,7 @@ import hr.show.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -23,25 +23,26 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
     private final TextCorrectionRepository textCorrectionRepository;
+
+    private final ImageDataQueueDtoToImageMapper imageDataQueueDtoToImageMapper;
+
     private final String filePath;
 
+    private static final String JPG_EXTENSION = ".jpg";
+
     @Autowired
-    public ImageServiceImpl(ImageRepository imageRepository, TextCorrectionRepository textCorrectionRepository, FileProperties fileProperties) {
+    public ImageServiceImpl(ImageRepository imageRepository, TextCorrectionRepository textCorrectionRepository,
+                            FileProperties fileProperties, ImageDataQueueDtoToImageMapper imageDataQueueDtoToImageMapper) {
         this.imageRepository = imageRepository;
         this.textCorrectionRepository = textCorrectionRepository;
+        this.imageDataQueueDtoToImageMapper = imageDataQueueDtoToImageMapper;
         this.filePath = fileProperties.getPath();
     }
 
     @Override
-    public void saveImage(ImageDto imageDto) {
-        // save file to file system
-        String savePath = writeImage(imageDto.getFile(),ImageUtil.joinDirAndFilePaths(filePath, ImageUtil.getCurrentDayDirName()), imageDto.getId());
-        // map
-        Image image = new Image();
-        image.setId(imageDto.getId());
-        image.setCreationTimestamp(imageDto.getCreationDate());
-        image.setPath(savePath);
-        // save to db
+    public void saveDataImage(ImageDataQueueMessage imageDataQueueMessage) {
+        Image image = imageDataQueueDtoToImageMapper.map(imageDataQueueMessage);
+        image.setPath(ImageUtil.joinDirAndFilePaths(filePath, ImageUtil.getCurrentDayDirName(), imageDataQueueMessage.getId() + JPG_EXTENSION));
         imageRepository.saveAndFlush(image);
     }
 
@@ -59,11 +60,10 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String writeImage(BufferedImage image, String dirPath, String fileName) {
-        try {
-            String path = ImageUtil.joinDirAndFilePaths(dirPath, fileName + ".jpg");
-            ImageIO.write(image, "jpg", new File(path));
-            return path;
+    public void writeImage(byte[] image, String requestId) {
+        String path = ImageUtil.joinDirAndFilePaths(filePath, ImageUtil.getCurrentDayDirName(), requestId + JPG_EXTENSION);
+        try (FileOutputStream stream = new FileOutputStream(path)) {
+            stream.write(image);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

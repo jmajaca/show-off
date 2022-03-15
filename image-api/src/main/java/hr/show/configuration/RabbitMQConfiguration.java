@@ -17,6 +17,11 @@ public class RabbitMQConfiguration implements RabbitListenerConfigurer {
     }
 
     @Bean
+    public Queue imageDataQueue() {
+        return new Queue("imageDataQueue");
+    }
+
+    @Bean
     public Queue textCorrectionQueue() {
         return new Queue("textCorrectionQueue");
     }

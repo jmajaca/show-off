@@ -1,19 +1,17 @@
 package hr.show.service;
 
+import hr.show.message.ImageDataQueueMessage;
 import hr.show.dto.ImageDto;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.Optional;
 
 public interface ImageService {
 
-    void saveImage(ImageDto imageDto);
+    void saveDataImage(ImageDataQueueMessage imageDataQueueMessage);
 
     Optional<ImageDto> getImage(String imageId);
 
     void saveTextCorrection(String imageId, String value);
 
-    String writeImage(BufferedImage image, String dirPath, String fileName);
-
+    void writeImage(byte[] image, String requestId);
 }
