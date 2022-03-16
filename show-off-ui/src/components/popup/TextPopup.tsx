@@ -1,7 +1,20 @@
-import React from 'react'
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, TextareaAutosize} from '@mui/material';
 import {TransitionProps} from '@mui/material/transitions';
+import {makeStyles} from '@mui/styles';
+
+import {TextPopupData} from '../../pages/MainPage';
+
+const useStyles = makeStyles({
+    textArea: {
+        border: 'none',
+        width: '100%',
+        outline: 'none',
+        resize: 'none',
+        backgroundColor: 'transparent'
+    },
+});
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -15,21 +28,23 @@ const Transition = React.forwardRef(function Transition(
 type TextPopupProps = {
     open: boolean,
     text: string,
-    handleClose?: (affirmative: boolean) => void,
+    title: string,
+    setPopupData: Dispatch<SetStateAction<TextPopupData>>,
+    className?: string,
 }
 
-export default function TextPopup({open, text, handleClose}: TextPopupProps) {
+export default function TextPopup({open, text, title, setPopupData, className}: TextPopupProps) {
 
-    const handleAffirmativeClose = () => {
-        if (handleClose) {
-            handleClose(true);
-        }
+    const [disableEdit, setDisableEdit] = useState<boolean>(true);
+
+    const classes = useStyles();
+
+    const handleClose = () => {
+        setPopupData({open: false, 'text': text})
     }
 
-    const handleNonAffirmativeClose = () => {
-        if (handleClose) {
-            handleClose(false);
-        }
+    const handleEdit = () => {
+        setDisableEdit(false);
     }
 
     return (
@@ -39,15 +54,21 @@ export default function TextPopup({open, text, handleClose}: TextPopupProps) {
             keepMounted
             onClose={handleClose}
         >
-            <DialogTitle>{"Title placeholder"}</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    {text}
+                    <TextareaAutosize
+                        value={text}
+                        minRows={3}
+                        className={classes.textArea}
+                        disabled={disableEdit}
+                        onChange={(e) => setPopupData({text: e.target.value, open: true})}
+                    />
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleNonAffirmativeClose}>Disagree</Button>
-                <Button onClick={handleAffirmativeClose}>Agree</Button>
+                { disableEdit && <Button onClick={handleEdit}>Edit</Button>}
+                <Button onClick={handleClose}>OK</Button>
             </DialogActions>
         </Dialog>
     );

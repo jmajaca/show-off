@@ -54,12 +54,15 @@ export type TextPopupData = {
 export default function MainPage() {
 
     const [image, setImage] = useState<ImageWrapper | undefined>();
+    const [requestId, setRequestId] = useState<string>('');
     const [processState, setProcessState] = useState<ProcessState>(ProcessState.UPLOAD);
     const [popupData, setPopupData] = useState<TextPopupData>({open: false, text: ''});
     const [sendAnimationFlag, setSendAnimationFlag] = useState<boolean>(false);
     const [progress, setProgress] = useState<number>(0);
 
     const classes = useStyles();
+
+    const popupTitle = 'Text extracted from image';
 
     useEffect(() => {
         if (processState === ProcessState.SENDING) {
@@ -68,6 +71,7 @@ export default function MainPage() {
             }, PROGRESS_CYCLE);
             resizeFile(image!, IMAGE_HEIGHT).then(resizedImage => {
                 showOffApi.readFromImage(resizedImage).then(response => {
+                    setRequestId(response.id);
                     setPopupData({open: true, text: response.text});
                     clearInterval(timer);
                     setProgress(0);
@@ -80,12 +84,13 @@ export default function MainPage() {
         }
     }, [processState]);
 
-    const handleTextPopupClose = (affirmative: boolean) => {
-        if (affirmative) {
-            console.log('process');
+    useEffect(() => {
+        if (!popupData.open && popupData.text !== '') {
+            showOffApi.sendTextCorrection({id: requestId, text: popupData.text}).then(response => {
+                console.log('sent text correction')
+            });
         }
-        setPopupData({open: false, text: popupData.text});
-    }
+    }, [popupData])
 
     const onVideoButtonClick = () => {
         switch (processState) {
@@ -135,7 +140,7 @@ export default function MainPage() {
                 <VideoButton processState={processState} sendAnimationFlag={sendAnimationFlag} onClick={onVideoButtonClick}/>
                 <FileButton sendAnimationFlag={sendAnimationFlag} onFileChange={onFileChange} onClick={onFileButtonClick} className={classes.fileButton}/>
             </div>
-            <TextPopup open={popupData.open} text={popupData.text} handleClose={handleTextPopupClose}/>
+            <TextPopup open={popupData.open} text={popupData.text} title={popupTitle} setPopupData={setPopupData}/>
         </div>
     );
 }

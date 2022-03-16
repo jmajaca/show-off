@@ -1,5 +1,5 @@
-import {readFromImagePath} from './paths';
-import {ReadFromImageResponse} from './types';
+import {readFromImagePath, textCorrectionPath} from './paths';
+import {ReadFromImageResponse, TextCorrection} from './types';
 
 async function readFromImage(image: File): Promise<ReadFromImageResponse> {
     const formData = new FormData();
@@ -11,7 +11,19 @@ async function readFromImage(image: File): Promise<ReadFromImageResponse> {
     return response.json();
 }
 
+async function sendTextCorrection(textCorrection: TextCorrection): Promise<any> {
+    const response = await fetch(textCorrectionPath(), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(textCorrection)
+    });
+    return response.json();
+}
+
 
 export const showOffApi = {
     readFromImage,
+    sendTextCorrection,
 }
