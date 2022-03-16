@@ -66,4 +66,23 @@ def read_image():
 @ocr_endpoint.route('/correct-text', methods=['POST'])
 @cross_origin()
 def correct_text():
-    return '', 404
+    """Endpoint for submitting text correction
+    ---
+    post:
+      description: Submit text correction for given id
+      responses:
+        202:
+          description: Text correction is successfully submitted
+          content:
+            application/json:
+              schema:
+                type: TODO
+                example: TODO
+        400:
+          description: Text correction request does not contain needed information
+    """
+    text_correction = request.json
+    if 'id' not in text_correction or 'text' not in text_correction:
+        return '', 400
+    queue_service.send_text_correction(text_correction['id'], text_correction['text'])
+    return '', 202
