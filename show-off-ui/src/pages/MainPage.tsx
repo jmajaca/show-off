@@ -13,6 +13,7 @@ import {ImageWrapper} from '../types/ImageWrapper';
 import FileButton from '../components/button/FileButton';
 import ImageBackground from '../components/background/ImageBackground';
 import FullCircularProgressWithLabel from '../components/progress/FullCircularProgressWithLabel';
+import CustomSnackbar from '../components/snackbars/CustomSnackbar';
 
 const IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT!);
 const PROGRESS_CYCLE = parseInt(process.env.REACT_APP_PROGRESS_CYCLE!);
@@ -59,10 +60,12 @@ export default function MainPage() {
     const [popupData, setPopupData] = useState<TextPopupData>({open: false, text: ''});
     const [sendAnimationFlag, setSendAnimationFlag] = useState<boolean>(false);
     const [progress, setProgress] = useState<number>(0);
+    const [openCustomSnackbar, setOpenCustomSnackBar] = useState<boolean>(false);
 
     const classes = useStyles();
 
     const popupTitle = 'Text extracted from image';
+    const readFromImageError = 'Error occurred while reading from image';
 
     useEffect(() => {
         if (processState === ProcessState.SENDING) {
@@ -77,6 +80,12 @@ export default function MainPage() {
                     setProgress(0);
                     setSendAnimationFlag(false);
                     onDeleteButtonClick();
+                }).catch(() => {
+                    setOpenCustomSnackBar(true);
+                    clearInterval(timer);
+                    setProgress(0);
+                    setSendAnimationFlag(false);
+                    onDeleteButtonClick();
                 })
             });
         } if (processState === ProcessState.SEND) {
@@ -86,7 +95,7 @@ export default function MainPage() {
 
     useEffect(() => {
         if (!popupData.open && popupData.text !== '') {
-            showOffApi.sendTextCorrection({id: requestId, text: popupData.text}).then(response => {
+            showOffApi.sendTextCorrection({id: requestId, text: popupData.text}).then(() => {
                 console.log('sent text correction')
             });
         }
@@ -141,6 +150,7 @@ export default function MainPage() {
                 <FileButton sendAnimationFlag={sendAnimationFlag} onFileChange={onFileChange} onClick={onFileButtonClick} className={classes.fileButton}/>
             </div>
             <TextPopup open={popupData.open} text={popupData.text} title={popupTitle} setPopupData={setPopupData}/>
+            <CustomSnackbar open={openCustomSnackbar} setOpen={setOpenCustomSnackBar} type='warning' message={readFromImageError}/>
         </div>
     );
 }
