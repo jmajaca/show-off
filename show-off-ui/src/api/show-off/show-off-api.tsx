@@ -11,7 +11,7 @@ async function readFromImage(image: File): Promise<ReadFromImageResponse> {
     return response.json();
 }
 
-async function sendTextCorrection(textCorrection: TextCorrection): Promise<any> {
+async function sendTextCorrection(textCorrection: TextCorrection): Promise<boolean> {
     const response = await fetch(textCorrectionPath(), {
         method: 'POST',
         headers: {
@@ -19,7 +19,7 @@ async function sendTextCorrection(textCorrection: TextCorrection): Promise<any> 
         },
         body: JSON.stringify(textCorrection)
     });
-    return response.json();
+    return response.status == 202;
 }
 
 

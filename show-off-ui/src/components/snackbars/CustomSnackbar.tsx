@@ -21,7 +21,7 @@ type CustomSnackbarProps = {
     horizontal?: 'left' | 'center' | 'right',
 }
 
-export default function CustomSnackbar({open, setOpen, type, message, autoHideDuration = 5000, vertical = 'top', horizontal = 'center'}: CustomSnackbarProps) {
+export default function CustomSnackbar({open, setOpen, type, message, autoHideDuration = 3000, vertical = 'top', horizontal = 'center'}: CustomSnackbarProps) {
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
