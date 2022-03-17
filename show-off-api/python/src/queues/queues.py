@@ -55,8 +55,8 @@ class ImageQueue(Queue):
         try:
             self._send_bytes(payload, headers)
         except Exception as e:
-            log.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
-                      exc_info=True)
+            log.warning(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
+                        exc_info=True)
 
 
 class ImageDataQueue(Queue):
@@ -68,8 +68,8 @@ class ImageDataQueue(Queue):
         try:
             self._send_json(dataclasses.asdict(payload), headers)
         except Exception as e:
-            log.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
-                      exc_info=True)
+            log.warning(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
+                        exc_info=True)
 
 
 class TextCorrectionQueue(Queue):
@@ -81,5 +81,5 @@ class TextCorrectionQueue(Queue):
         try:
             self._send_json(dataclasses.asdict(payload), headers)
         except Exception as e:
-            log.error(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
-                      exc_info=True)
+            log.warning(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
+                        exc_info=True)

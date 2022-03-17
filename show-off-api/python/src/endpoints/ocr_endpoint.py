@@ -57,8 +57,11 @@ def read_image():
         # cv2.imwrite(f'{i}.jpg', cut_image)
         is_success, buffer = cv2.imencode('.jpg', cut_image)
         images.append(io.BytesIO(buffer))
-    extracted_text = recognition_api.extract_text(images)
-    text = ' '.join(extracted_text.tokens)
+    if len(text_boxes) != 0:
+        extracted_text = recognition_api.extract_text(images)
+        text = ' '.join(extracted_text.tokens)
+    else:
+        text = ''
     queue_service.send_image_data(request_id, text_boxes, text)
     return {'id': request_id, 'text': text}, 200
 
