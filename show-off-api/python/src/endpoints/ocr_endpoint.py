@@ -8,7 +8,6 @@ from flask import Blueprint, request
 from flask_cors import cross_origin
 
 from api.api import DetectionAPI, RecognitionAPI
-from exceptions.exceptions import ImageDimensionsTooLargeError
 from services.image_service import ImageService
 from services.queue_service import QueueService
 
@@ -42,19 +41,18 @@ def read_image():
     """
     request_id = uuid.uuid4().__str__()
     files = request.files.to_dict()
-    image = files['image']
-    cv2_image = ImageService.cv2_convert(image)
     try:
+        image = files['image']
+        cv2_image = ImageService.cv2_convert(image)
         ImageService.check_dimensions(cv2_image)
-    except ImageDimensionsTooLargeError as e:
-        log.error('Invalid image', e)
+    except Exception as e:
+        log.error('Invalid image', exc_info=True)
         return {'timestamp': datetime.now(), 'error': str(e)}, 400
     queue_service.send_image(request_id, image)
     text_boxes = detection_api.get_minimal_text_boxes(image)
     images = []
     for i, box in enumerate(text_boxes):
         cut_image = ImageService.cut_min_box(cv2_image, box)
-        # cv2.imwrite(f'{i}.jpg', cut_image)
         is_success, buffer = cv2.imencode('.jpg', cut_image)
         images.append(io.BytesIO(buffer))
     if len(text_boxes) != 0:
