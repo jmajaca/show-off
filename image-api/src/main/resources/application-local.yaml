@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:image_db
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+  rabbitmq:
+    port: 5672
+    host: localhost
+    password: guest
+    username: guest
+
+file:
+  path: /tmp/files
+  max-age: 7
+
+server:
+  port: 8088
