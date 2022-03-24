@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: internal-urls
-data:
-  detection_api_url: "http://jmajaca.xyz:5001"
-  recognition_api_url: "http://jmajaca.xyz:5002"

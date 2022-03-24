@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit-mq
+  labels:
+    app: rabbit-mq
+    type: infra
+spec:
+  selector:
+    matchLabels:
+      app: rabbit-mq
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: rabbit-mq
+        type: infra
+    spec:
+      containers:
+      - name: rabbit-mq
+        image: arm64v8/rabbitmq:3-management
+        env:
+          - name: RABBITMQ_DEFAULT_USER
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-mq-credentials
+                key: username
+          - name: RABBITMQ_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-mq-credentials
+                key: password
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+        livenessProbe:
+          tcpSocket:
+            port: 5672
+          initialDelaySeconds: 10
+          periodSeconds: 5
+# TODO mount volume
