@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1
+      id: '1'
       author: jmajaca
       changes:
         - createTable:
@@ -79,3 +79,18 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: image_text_correction_foregin_key
                     references: image(id)
+  - changeSet:
+        id: '2'
+        author: jmajaca
+        changes:
+          - addColumn:
+              tableName: text_correction
+              columns:
+                - column:
+                    name: start_y
+                    type: int
+                    constraints:
+                      nullable: false
+          - dropUniqueConstraint:
+              tableName: text_correction
+              constraintName: image_text_correction_foregin_key
