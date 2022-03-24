@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from apispec import APISpec
@@ -11,6 +12,10 @@ from endpoints.doc_endpoint import doc_endpoint
 from endpoints.health_endpoint import health_endpoint, check_health
 from endpoints.ocr_endpoint import ocr_endpoint, read_image
 
+logging.basicConfig(level=logging.INFO)
+
+log = logging.getLogger(__name__)
+
 spec = APISpec(
     title='Show Off API',
     version='v1',
@@ -18,20 +23,28 @@ spec = APISpec(
     openapi_version='3.0.3'
 )
 
-app = Flask(__name__)
-app.register_blueprint(ocr_endpoint)
-app.register_blueprint(health_endpoint)
-app.register_blueprint(doc_endpoint)
 
-CORS(app)
+def create_app():
+    app = Flask(__name__)
+    app.register_blueprint(ocr_endpoint)
+    app.register_blueprint(health_endpoint)
+    app.register_blueprint(doc_endpoint)
 
-with app.test_request_context():
-    spec.path(view=check_health)
-    spec.path(view=read_image)
+    CORS(app)
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-with open(dir_path + '/doc/swagger.json', 'w') as f:
-    json.dump(spec.to_dict(), f)
+    with app.test_request_context():
+        spec.path(view=check_health)
+        spec.path(view=read_image)
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    with open(dir_path + '/doc/swagger.json', 'w') as f:
+        json.dump(spec.to_dict(), f)
+
+    return app
+
+
+app = create_app()
+
 
 if __name__ == '__main__':
     app.run(debug=True)
