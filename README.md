@@ -14,7 +14,7 @@ at [jmajaca.xyz/show-off](https://jmajaca.xyz/show-off).
 
 ## Architecture
 
-[!architecture](doc/images/architecture.png)
+![architecture](doc/images/architecture.png)
 
 ## Models
 
