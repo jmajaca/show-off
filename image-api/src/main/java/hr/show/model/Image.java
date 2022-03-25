@@ -28,11 +28,11 @@ public class Image {
     @Column(name = "creation_timestamp", nullable = false)
     private LocalDateTime creationTimestamp;
 
-    @OneToMany(mappedBy="image", cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy="image", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<ImageBox> boxes;
 
-    @OneToOne(mappedBy="image", cascade = CascadeType.REFRESH)
+    @OneToOne(mappedBy="image", cascade = CascadeType.ALL)
     private TextCorrection textCorrection;
 
     @Override
