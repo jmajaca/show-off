@@ -33,7 +33,7 @@ public class ImageBox {
     @Column(name = "height", nullable = false)
     private Integer height;
 
-    @Column(name = "text", length = 512, nullable = false)
+    @Column(name = "text", length = 512)
     private String text;
 
     @ManyToOne

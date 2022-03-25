@@ -2,23 +2,14 @@ package hr.show.exception;
 
 public class InvalidImageDataQueueMessage extends RuntimeException {
 
-    private static final String defaultErrorMessage = "Id from body '%s' does not match id from header '%s'";
+    private static final String defaultErrorMessage = "Request id '%s' is not valid";
 
-    public InvalidImageDataQueueMessage(String bodyId, String requestId, Throwable e) {
-        this(String.format(defaultErrorMessage, bodyId, requestId), e);
+    public InvalidImageDataQueueMessage(String requestId, Throwable e) {
+        super(String.format(defaultErrorMessage, requestId), e);
     }
 
-    public InvalidImageDataQueueMessage(String bodyId, String requestId) {
-        this(String.format(defaultErrorMessage, bodyId, requestId));
+    public InvalidImageDataQueueMessage(String requestId) {
+        super(String.format(defaultErrorMessage, requestId));
     }
-
-    public InvalidImageDataQueueMessage(String errorMessage) {
-        super(errorMessage);
-    }
-
-    public InvalidImageDataQueueMessage(String errorMessage, Throwable err) {
-        super(errorMessage, err);
-    }
-
 
 }

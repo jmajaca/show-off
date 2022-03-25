@@ -27,4 +27,6 @@ public class ImageBoxDataQueueMessage {
     @PositiveOrZero(message = "height must be greater or equal to 0")
     private Integer height;
 
+    private String text;
+
 }
