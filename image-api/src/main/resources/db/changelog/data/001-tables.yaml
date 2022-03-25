@@ -84,7 +84,7 @@ databaseChangeLog:
         author: jmajaca
         changes:
           - addColumn:
-              tableName: text_correction
+              tableName: image_box
               columns:
                 - column:
                     name: start_y
