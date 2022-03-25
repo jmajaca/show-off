@@ -1,6 +1,9 @@
 # Project: **show-off**
 
-todo: images
+![ArgoCD](doc/logos/argocd.png) ![Docker](doc/logos/docker.png) ![Flask](doc/logos/flask.png) ![GitHub Actions](doc/logos/github_actions.png) 
+![Java](doc/logos/java.png) ![Kubernetes](doc/logos/kubernetes.png) ![Minikube](doc/logos/minikube.png) ![PostgreSQL](doc/logos/postgre.png) 
+![Pytorch](doc/logos/pytorch.png) ![RabbitMQ](doc/logos/rabbit.png) ![React](doc/logos/react.png) ![Spring Boot](doc/logos/spring_boot.png)
+![Typescript](doc/logos/typescript.png) 
 
 ## About
 
