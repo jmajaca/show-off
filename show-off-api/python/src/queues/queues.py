@@ -29,7 +29,7 @@ class Queue(ABC):
     def _send_json(self, payload: dict | list, headers: dict):
         connection = pika.BlockingConnection(self.__connection_params)
         channel = connection.channel()
-        channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=bytes(json.dumps(payload)),
+        channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=json.dumps(payload),
                               properties=pika.BasicProperties(content_type='application/json', headers=headers))
         connection.close()
 
