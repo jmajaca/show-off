@@ -59,8 +59,9 @@ def read_image():
         extracted_text = recognition_api.extract_text(images)
         text = ' '.join(extracted_text.tokens)
     else:
+        extracted_text = []
         text = ''
-    queue_service.send_image_data(request_id, text_boxes, text)
+    queue_service.send_image_data(request_id, text_boxes, extracted_text)
     return {'id': request_id, 'text': text}, 200
 
 
