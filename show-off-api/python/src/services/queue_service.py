@@ -25,7 +25,7 @@ class QueueService:
         if len(boxes) != len(texts):
             log.warning(f'For request {request_id} there is missmatch in length of boxes and texts')
             return
-        request = list(map(lambda box, text: ImageBoxData(box.start_x, box.start_y, box.width, box.height, text.text),
+        request = list(map(lambda box, text: ImageBoxData(box.start_x, box.start_y, box.width, box.height, text),
                            boxes, texts))
         log.info(f'Sending request with id {request_id} to queue {self.image_data_queue.queue}')
         self.image_data_queue.send(request, QueueService.__create_request_header(request_id))
