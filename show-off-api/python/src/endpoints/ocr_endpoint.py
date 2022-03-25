@@ -56,8 +56,8 @@ def read_image():
         is_success, buffer = cv2.imencode('.jpg', cut_image)
         images.append(io.BytesIO(buffer))
     if len(text_boxes) != 0:
-        extracted_text = recognition_api.extract_text(images)
-        text = ' '.join(extracted_text.tokens)
+        extracted_text = recognition_api.extract_text(images).tokens
+        text = ' '.join(extracted_text)
     else:
         extracted_text = []
         text = ''
