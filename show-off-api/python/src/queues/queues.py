@@ -3,11 +3,11 @@ import json
 import logging
 from abc import ABC, abstractmethod
 
+import instance as instance
 import pika
 
 import env
-from models.image_api import ImageData, TextCorrection
-
+from models.image_api import TextCorrection, ImageBoxData
 
 log = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class Queue(ABC):
         self.queue = queue
         self.exchange = exchange
 
-    def _send_json(self, payload: dict, headers: dict):
+    def _send_json(self, payload: dict | list, headers: dict):
         connection = pika.BlockingConnection(self.__connection_params)
         channel = connection.channel()
         channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=json.dumps(payload),
@@ -64,9 +64,9 @@ class ImageDataQueue(Queue):
     def __init__(self):
         super().__init__(env.IMAGE_DATA_QUEUE_NAME)
 
-    def send(self, payload: ImageData, headers: dict):
+    def send(self, payload: list[ImageBoxData], headers: dict):
         try:
-            self._send_json(dataclasses.asdict(payload), headers)
+            self._send_json([dataclasses.asdict(box) for box in payload], headers)
         except Exception as e:
             log.warning(f"Error has occurred while sending request with headers {headers} on queue {self.queue}",
                         exc_info=True)
