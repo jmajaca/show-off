@@ -28,16 +28,23 @@ def read_image():
     ---
     post:
       description: Submit image with text
+      requestBody:
+        content:
+          multipart/form-data:
+            schema: ReadImageRequestSchema
       responses:
         200:
           description: Text is successfully extracted
           content:
             application/json:
-              schema:
-                type: string
-                example: TODO
+              schema: ReadImageResponseSchema
         400:
           description: Image is not acceptable
+          content:
+            application/json:
+              schema: ErrorSchema
+        500:
+          description: All other errors
     """
     request_id = uuid.uuid4().__str__()
     files = request.files.to_dict()
@@ -72,16 +79,17 @@ def correct_text():
     ---
     post:
       description: Submit text correction for given id
+      requestBody:
+        content:
+            application/json:
+              schema: TextCorrectionSchema
       responses:
         202:
           description: Text correction is successfully submitted
-          content:
-            application/json:
-              schema:
-                type: TODO
-                example: TODO
         400:
           description: Text correction request does not contain needed information
+        500:
+          description: All other errors
     """
     text_correction = request.json
     if 'id' not in text_correction or 'text' not in text_correction:

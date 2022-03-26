@@ -8,9 +8,10 @@ from apispec_webframeworks.flask import FlaskPlugin
 from flask import Flask
 from flask_cors import CORS
 
+from schema.schemas import TextCorrectionSchema
 from endpoints.doc_endpoint import doc_endpoint
 from endpoints.health_endpoint import health_endpoint, check_health
-from endpoints.ocr_endpoint import ocr_endpoint, read_image
+from endpoints.ocr_endpoint import ocr_endpoint, read_image, correct_text
 
 logging.basicConfig(level=logging.INFO)
 
@@ -33,8 +34,9 @@ def create_app():
     CORS(app)
 
     with app.test_request_context():
-        spec.path(view=check_health)
         spec.path(view=read_image)
+        spec.path(view=correct_text)
+        spec.path(view=check_health)
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     with open(dir_path + '/doc/swagger.json', 'w') as f:
