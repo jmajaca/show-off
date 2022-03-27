@@ -9,20 +9,50 @@
             margin: 0;
             padding: 0;
         }
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: 0;
+        }
+        .navbar {
+            top: 0;
+            position: sticky;
+            background-color: #0096FF;
+            height: 40px;
+        }
+        .microservice {
+            cursor: pointer;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 20px;
+            margin-right: 10vw;
+        }
+        .microservice:hover {
+            background-color: lightblue;
+        }
+        .main-title {
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 30px;
+            margin-left: 1vw;
+            margin-right: 10vw;
+        }
     </style>
 </head>
-<body>
-    <div>
-        <button type="button" id="show-off-api">Show Off API</button>
-        <button type="button" id="detection-api">Detection API</button>
-        <button type="button" id="recognition-api">Recognition API</button>
-        <button type="button" id="image-api">Image API</button>
+<body onload="initSite()">
+    <div class="navbar">
+        <label class="main-title">Show Off Documentation</label>
+        <label class="microservice" id="show-off-api">Show Off API</label>
+        <label class="microservice" id="detection-api">Detection API</label>
+        <label class="microservice" id="recognition-api">Recognition API</label>
+        <label class="microservice" id="image-api">Image API</label>
     </div>
     <iframe id="iframe"></iframe>
 </body>
 </html>
 
 <script>
+
     let iFrame = document.getElementById("iframe");
 
     let showOffApiButton = document.getElementById("show-off-api");
@@ -30,13 +60,33 @@
     let recognitionApiButton = document.getElementById("recognition-api");
     let imageApiButton = document.getElementById("image-api");
 
-
     function setIFrame(microservice) {
         let docEndpoint = "doc";
         if (microservice === "image-api") {
             docEndpoint = "docs"
         }
         iFrame.src = `https://jmajaca.xyz:5001/${microservice}/${docEndpoint}`;
+        setURL(microservice);
+    }
+
+    function setURL(microservice) {
+        let url = window.location.href;
+        let index = url.indexOf('#');
+        if (index > -1){
+            url = url.slice(0, index) + '#' + microservice
+        } else {
+            url += '#' + microservice
+        }
+        window.location.href = url;
+    }
+
+    function initSite() {
+        let url = window.location.href;
+        let index = url.indexOf('#');
+        if (index > -1) {
+            let microservice = url.slice(index + 1);
+            setIFrame(microservice);
+        }
     }
 
     showOffApiButton.addEventListener("click", function(){setIFrame("show-off-api")});
