@@ -13,7 +13,7 @@ Implemented system and applications read text from supplied images and return ex
 In essence this is an OCR application.
 
 Application and it's Kubernetes cluster are hosted on Oracle Cloud ARM architecture server. Application itself can be found 
-at [jmajaca.xyz/show-off](https://jmajaca.xyz/show-off).
+at [jmajaca.xyz/show-off](https://jmajaca.xyz/show-off). While APIs documentation is available [here](https://jmajaca.xyz:5000/).
 
 ## Architecture
 
@@ -49,13 +49,14 @@ todo: model description + training process
 
 ## Microservices
 
-| Name                | Description                                                                 | Language   | Framework   | Source code folder    |
-|---------------------|-----------------------------------------------------------------------------|------------|-------------|-----------------------|
-| **show-off-ui**     | Frontend application that sends images to OCR proccess and displays results | TypeScript | React       | `show-off-ui`         |
-| **show-off-api**    | Backend for Frontend (BFF) application                                      | Python     | Flask       | `show-off-api/python` |
-| **detection-api**   | CTPN Model wrapper for REST calls                                           | Python     | Flask       | `detection/python`    |
-| **recognition-api** | CRNN Model wrapper for REST calls                                           | Python     | Flask       | `recognition/python`  |
-| **image-api**       | Application that stores images and image data                               | Java       | Spring Boot | `image-api`           |
+| Name                 | Description                                                                 | Language   | Framework   | Source code folder    |
+|----------------------|-----------------------------------------------------------------------------|------------|-------------|-----------------------|
+| **show-off-ui**      | Frontend application that sends images to OCR proccess and displays results | TypeScript | React       | `show-off-ui`         |
+| **show-off-api**     | Backend for Frontend (BFF) application                                      | Python     | Flask       | `show-off-api/python` |
+| **detection-api**    | CTPN Model wrapper for REST calls                                           | Python     | Flask       | `detection/python`    |
+| **recognition-api**  | CRNN Model wrapper for REST calls                                           | Python     | Flask       | `recognition/python`  |
+| **image-api**        | Application that stores images and image data                               | Java       | Spring Boot | `image-api`           |
+| **documentation-ui** | Frontend application for viewing documentation from all APIs at one place   | JavaScript | -           | `documentation-ui`    |
 
 ### show off ui
 
@@ -77,7 +78,7 @@ three queues for asynchronous calls. If one of synchronous calls fails whole pro
 processes fails it will have no impact on process itself. Asynchronous calls on queues are used to store data about 
 image and it's data in form of text placement and extraction.
 
-Documentation of API endpoints can be found on this [link]().
+Documentation of API endpoints can be found on this [link](https://jmajaca.xyz:5000/#show-off-api).
 
 ### detection api
 
@@ -85,7 +86,7 @@ Application that is wrapper for detection model wich exposes relevant endpoints 
 
 In future wrapper implementation in Golang is considered.
 
-Documentation of API endpoints can be found on this [link]().
+Documentation of API endpoints can be found on this [link](https://jmajaca.xyz:5000/#detection-api).
 
 ### recognition api
 
@@ -93,7 +94,7 @@ Application that is wrapper for recognition model wich exposes relevant endpoint
 
 In future wrapper implementation in Golang is considered.
 
-Documentation of API endpoints can be found on this [link]().
+Documentation of API endpoints can be found on this [link](https://jmajaca.xyz:5000/#recognition-api).
 
 ### image api
 
@@ -103,7 +104,14 @@ Image and data is received via queue. There exists some methods exposed via REST
 Image itself is stored on filesystem while the data received during OCR process is stored in database. There exists cron 
 job responsible for deleting images and image related data if they are older than N days.
 
-Documentation of API endpoints can be found on this [link]().
+Documentation of API endpoints can be found on this [link](https://jmajaca.xyz:5000/#image-api).
+
+### documentation-ui
+
+Frontend application implementation in plain JavaScript with no Framework. It uses one HTML file and one nginx configuration
+for reverse proxy. Via this application one can see all API docs in one place.
+
+Application can be found [here](https://jmajaca.xyz:5000).
 
 ## CI-CD
 
@@ -181,6 +189,6 @@ todo
 
 ## TODOs
 
-[ ] frontend rectangle of user interest
-[ ] detection performance
-[ ] golang implementation of apis
+- [ ] frontend rectangle of user interest
+- [ ] detection performance
+- [ ] golang implementation of apis
