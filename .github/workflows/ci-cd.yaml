@@ -67,7 +67,7 @@ jobs:
           ref: ${{ github.ref_name }}
       -
         name: Set up JDK
-        if: ${{ env.LANGUAGE }} == 'java'
+        if: ${{ env.LANGUAGE  == 'java' }}
         uses: actions/setup-java@v2
         with:
           distribution: 'microsoft'
@@ -75,7 +75,7 @@ jobs:
           cache: 'gradle'
       -
         name: Gradle build
-        if: ${{ env.LANGUAGE }} == 'java'
+        if: ${{ env.LANGUAGE  == 'java' }}
         run: cd ${{ env.PROJECT_CONTEXT }} && ./gradlew build
       -
         name: Set up QEMU
