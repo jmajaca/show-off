@@ -68,7 +68,7 @@ jobs:
       -
         name: Gradle build
         if: ${{ env.LANGUAGE }} == 'java'
-        run: cd ${{ env.PROJECT_CONTEXT }} && ./gradlew build enunciate
+        run: cd ${{ env.PROJECT_CONTEXT }} && ./gradlew build
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1

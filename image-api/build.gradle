@@ -1,9 +1,3 @@
-/*buildscript {
-    dependencies {
-        classpath "com.webcohesion.enunciate:enunciate-lombok:2.13.3"
-    }
-}*/
-
 plugins {
     id 'java'
     id 'com.webcohesion.enunciate' version '2.13.3'
@@ -17,6 +11,13 @@ sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
+}
+
+tasks.bootJar {
+    dependsOn(enunciate)
+    from("${project.buildDir}/enunciate/docs") {
+        into 'BOOT-INF/classes/static/docs'
+    }
 }
 
 dependencies {
