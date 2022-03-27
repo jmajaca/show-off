@@ -8,6 +8,7 @@ on:
       - 'detection'
       - 'ocr-model'
       - 'image-api'
+      - 'documentation-ui'
 
 jobs:
   build:
@@ -49,6 +50,13 @@ jobs:
           echo "PROJECT_CONTEXT=image-api" >> $GITHUB_ENV
           echo "LANGUAGE=java" >> $GITHUB_ENV
       -
+        name: Check if project is documentation-ui
+        if: github.ref_name == 'documentation-ui'
+        run: |
+          echo "PROJECT=documentation-ui" >> $GITHUB_ENV
+          echo "PROJECT_CONTEXT=documentation-ui" >> $GITHUB_ENV
+          echo "LANGUAGE=none" >> $GITHUB_ENV
+      -
         id: current_project
         name: Sharing current project with other jobs
         run: echo "::set-output name=project::${{ env.PROJECT }}"
@@ -59,7 +67,7 @@ jobs:
           ref: ${{ github.ref_name }}
       -
         name: Set up JDK
-        if: ${{ env.LANGUAGE }} == 'java'
+        if: ${{ env.LANGUAGE  == 'java' }}
         uses: actions/setup-java@v2
         with:
           distribution: 'microsoft'
@@ -67,7 +75,7 @@ jobs:
           cache: 'gradle'
       -
         name: Gradle build
-        if: ${{ env.LANGUAGE }} == 'java'
+        if: ${{ env.LANGUAGE  == 'java' }}
         run: cd ${{ env.PROJECT_CONTEXT }} && ./gradlew build
       -
         name: Set up QEMU
