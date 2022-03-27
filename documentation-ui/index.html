@@ -53,6 +53,10 @@
 
 <script>
 
+    const host = "jmajaca.xyz";
+    const port = "5000";
+    const protocol = "https"
+
     let iFrame = document.getElementById("iframe");
 
     let showOffApiButton = document.getElementById("show-off-api");
@@ -65,7 +69,7 @@
         if (microservice === "image-api") {
             docEndpoint = "docs"
         }
-        iFrame.src = `https://jmajaca.xyz:5001/${microservice}/${docEndpoint}`;
+        iFrame.src = `${protocol}://${host}:${port}/${microservice}/${docEndpoint}`;
         setURL(microservice);
     }
 
