@@ -8,6 +8,7 @@ on:
       - 'detection'
       - 'ocr-model'
       - 'image-api'
+      - 'documentation-ui'
 
 jobs:
   build:
@@ -48,6 +49,13 @@ jobs:
           echo "PROJECT=image-api" >> $GITHUB_ENV
           echo "PROJECT_CONTEXT=image-api" >> $GITHUB_ENV
           echo "LANGUAGE=java" >> $GITHUB_ENV
+      -
+        name: Check if project is documentation-ui
+        if: github.ref_name == 'documentation-ui'
+        run: |
+          echo "PROJECT=documentation-ui" >> $GITHUB_ENV
+          echo "PROJECT_CONTEXT=documentation-ui" >> $GITHUB_ENV
+          echo "LANGUAGE=none" >> $GITHUB_ENV
       -
         id: current_project
         name: Sharing current project with other jobs
