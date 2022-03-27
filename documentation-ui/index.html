@@ -32,7 +32,11 @@
 
 
     function setIFrame(microservice) {
-        iFrame.src = "https://jmajaca.xyz:5001/doc/" + microservice
+        let docEndpoint = "doc";
+        if (microservice === "image-api") {
+            docEndpoint = "docs"
+        }
+        iFrame.src = `https://jmajaca.xyz:5001/${microservice}/${docEndpoint}`;
     }
 
     showOffApiButton.addEventListener("click", function(){setIFrame("show-off-api")});
