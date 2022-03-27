@@ -31,8 +31,6 @@ def create_app():
     app.register_blueprint(health_endpoint)
     app.register_blueprint(doc_endpoint)
 
-    CORS(app)
-
     with app.test_request_context():
         spec.path(view=read_image)
         spec.path(view=correct_text)
@@ -46,6 +44,7 @@ def create_app():
 
 
 app = create_app()
+CORS(app)
 
 
 if __name__ == '__main__':
