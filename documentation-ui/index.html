@@ -12,19 +12,32 @@
     </style>
 </head>
 <body>
-    <button type="button" id="show-off-api">Test</button>
+    <div>
+        <button type="button" id="show-off-api">Show Off API</button>
+        <button type="button" id="detection-api">Detection API</button>
+        <button type="button" id="recognition-api">Recognition API</button>
+        <button type="button" id="image-api">Image API</button>
+    </div>
     <iframe id="iframe"></iframe>
 </body>
 </html>
 
 <script>
     let iFrame = document.getElementById("iframe");
+
     let showOffApiButton = document.getElementById("show-off-api");
+    let detectionApiButton = document.getElementById("detection-api");
+    let recognitionApiButton = document.getElementById("recognition-api");
+    let imageApiButton = document.getElementById("image-api");
 
 
-    function setIFrame() {
-        iFrame.src = "https://jmajaca.xyz/doc/show-off-api"
+    function setIFrame(microservice) {
+        iFrame.src = "https://jmajaca.xyz/doc/" + microservice
     }
 
-    showOffApiButton.addEventListener("click", setIFrame);
+    showOffApiButton.addEventListener("click", function(){setIFrame("show-off-api")});
+    detectionApiButton.addEventListener("click", function(){setIFrame("detection-api")});
+    recognitionApiButton.addEventListener("click", function(){setIFrame("recognition-api")});
+    imageApiButton.addEventListener("click", function(){setIFrame("image-api")});
+
 </script>
