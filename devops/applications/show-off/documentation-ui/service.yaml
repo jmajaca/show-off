@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: documentation-ui
+  labels:
+    app: documentation-ui
+    type: plain-frontend
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 80
+    nodePort: 30001
+    protocol: TCP
+  selector:
+    app: documentation-ui

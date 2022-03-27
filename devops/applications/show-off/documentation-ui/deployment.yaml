@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: documentation-ui
+  labels:
+    app: documentation-ui
+    type: plain-frontend
+spec:
+  selector:
+    matchLabels:
+      app: documentation-ui
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: documentation-ui
+        type: plain-frontend
+    spec:
+      containers:
+      - name: documentation-ui
+        image: spaladium/documentation-ui
+        ports:
+        - containerPort: 80
