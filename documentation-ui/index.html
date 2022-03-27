@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <title>Show Off Documentation</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <button type="button" id="show-off-api">Test</button>
+    <iframe id="iframe"></iframe>
+</body>
+</html>
+
+<script>
+    let iFrame = document.getElementById("iframe");
+    let showOffApiButton = document.getElementById("show-off-api");
+
+
+    function setIFrame() {
+        iFrame.src = "https://jmajaca.xyz/show-off-api"
+    }
+
+    showOffApiButton.addEventListener("click", setIFrame);
+</script>
