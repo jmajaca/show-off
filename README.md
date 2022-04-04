@@ -70,7 +70,7 @@ to backend (after compression). User marking region of image before sending it i
 
 ### show off api
 
-Application that is desgined as Backend for Frontend. It's main task is to dispatch requests (after processing them) on 
+Application that is designed as Backend for Frontend. It's main task is to dispatch requests (after processing them) on 
 other APIs when request is received from frontend.
 
 Other services with which this application interacts are detection-api and recognition-api for synchronous calls and 
@@ -78,23 +78,23 @@ three queues for asynchronous calls. If one of synchronous calls fails whole pro
 processes fails it will have no impact on process itself. Asynchronous calls on queues are used to store data about 
 image and it's data in form of text placement and extraction.
 
-Documentation of API endpoints can be found on this [link](https://jmajaca.xyz:5000/#show-off-api).
+Documentation of API endpoints can be found [here](https://jmajaca.xyz:5000/#show-off-api).
 
 ### detection api
 
-Application that is wrapper for detection model wich exposes relevant endpoints via REST.
+Application that is wrapper for detection model which exposes relevant endpoints via REST.
 
 In future wrapper implementation in Golang is considered.
 
-Documentation of API endpoints can be found on this [link](https://jmajaca.xyz:5000/#detection-api).
+Documentation of API endpoints can be found [here](https://jmajaca.xyz:5000/#detection-api).
 
 ### recognition api
 
-Application that is wrapper for recognition model wich exposes relevant endpoints via REST.
+Application that is wrapper for recognition model which exposes relevant endpoints via REST.
 
 In future wrapper implementation in Golang is considered.
 
-Documentation of API endpoints can be found on this [link](https://jmajaca.xyz:5000/#recognition-api).
+Documentation of API endpoints can be found [here](https://jmajaca.xyz:5000/#recognition-api).
 
 ### image api
 
@@ -104,7 +104,7 @@ Image and data is received via queue. There exists some methods exposed via REST
 Image itself is stored on filesystem while the data received during OCR process is stored in database. There exists cron 
 job responsible for deleting images and image related data if they are older than N days.
 
-Documentation of API endpoints can be found on this [link](https://jmajaca.xyz:5000/#image-api).
+Documentation of API endpoints can be found [here](https://jmajaca.xyz:5000/#image-api).
 
 ### documentation-ui
 
@@ -117,11 +117,14 @@ Application can be found [here](https://jmajaca.xyz:5000).
 
 Complete pipeline is created that handles build and deploy to server on every push to one of the target branches. 
 All runs of pipeline can be seen in projects [actions](https://github.com/jmajaca/show-off/actions) tab.
+Product of build process is Docker image which is published to [DockerHub](https://hub.docker.com/u/spaladium).
 
 ### Argo
 
 ArgoCD is used for GitOps-ing kubernetes resources. More information about this concrete implementation and use of 
 ArgoCD can be found [here](https://github.com/jmajaca/show-off/blob/master/devops/README.md).
+
+![show-off namespace](doc/images/argo-show-off.png)
 
 ### Minikube
 
@@ -129,11 +132,15 @@ Minikube is used for operating Kubernetes cluster. Three namespaces are created:
 In argo namespace ArgoCD is installed, in show-off-infra rabbit queue and postgres database are located while all other 
 microservices are in show-off namespace.
 
+![show-off namespace](doc/images/minikube.png)
+
 ### GitHub Actions
 
 GitHub actions is used for CI-CD. There exists one `yaml` file for declaring build and deploy process for every 
 microservice which is triggered when branch associated with that microservice receives new commit. YAML file can be 
 found [here](https://github.com/jmajaca/show-off/blob/master/.github/workflows/ci-cd.yaml).
+
+![Build and Deploy pipeline with GitHub Actions](doc/images/github-actions.png)
 
 ## Infra
 
