@@ -115,7 +115,7 @@ Application that handles saving image and its corresponding data.
 
 Image and data is received via queue. There exists some methods exposed via REST API, but that are only for showing off. 
 Image itself is stored on filesystem while the data received during OCR process is stored in database. There exists cron 
-job responsible for deleting images and image related data if they are older than N days.
+job responsible for deleting images and image related data if they are older than N=7 days.
 
 Documentation of API endpoints can be found [here](https://jmajaca.xyz:5000/#image-api).
 
@@ -165,9 +165,13 @@ imageQueue takes binary data that represents image. imageDataQueue takes JSON wi
 placement of text on image and extracted text itself. textCorrectionQueue takes JSON with text correction value bind to 
 request from header of request.
 
+![Queues](doc/images/rabbit-queues.png)
+
 ### database
 
 Postgres database consist of following tables.
+
+![Database diagram](doc/images/db-diagram.png)
 
 #### image
 
@@ -199,13 +203,45 @@ Postgres database consist of following tables.
 
 ## Networking
 
-### SSL certs
+### Domain and SSL cert
 
-todo
+Domain and SSL certificate were bought on [NameCheap](https://www.namecheap.com/) and installed on Ubuntu server. 
 
 ### nginx
 
-todo
+Ports on Ubuntu server are exposed via nginx and reverse proxy. Configuration for application itself is following:
+
+```
+server {
+
+    listen 443 ssl;
+    
+    ssl_certificate REDACTED;
+    ssl_certificate_key REDACTED;
+    
+    server_name jmajaca.xyz;
+    
+    location / {
+        proxy_pass http://REDACTED:30000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header SSL_PROTOCOL $ssl_protocol;
+    }
+
+}
+
+server {
+
+        listen 80;
+
+        server_name jmajaca.xyz www.jmajaca.xyz;
+
+        return 301 https://jmajaca.xyz$request_uri;
+
+}
+```
 
 ## TODOs
 
