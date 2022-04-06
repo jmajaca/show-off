@@ -3,7 +3,7 @@ import logging
 from werkzeug.datastructures import FileStorage
 
 from models.detection_api import MinimalTextBox
-from models.image_api import ImageBoxData, ImageData, TextCorrection
+from models.image_api import ImageBoxData, TextCorrection
 from queues.queues import ImageQueue, ImageDataQueue, TextCorrectionQueue
 
 
@@ -21,9 +21,12 @@ class QueueService:
         log.info(f'Sending request with id {request_id} to queue {self.image_queue.queue}')
         self.image_queue.send(QueueService.__read_bytes_from_file(file), QueueService.__create_request_header(request_id))
 
-    def send_image_data(self, request_id: str, boxes: list[MinimalTextBox], text: str):
-        send_boxes = list(map(lambda box: ImageBoxData(box.start_x, box.start_y, box.width, box.height), boxes))
-        request = ImageData(request_id, send_boxes, text)
+    def send_image_data(self, request_id: str, boxes: list[MinimalTextBox], texts: list[str]):
+        if len(boxes) != len(texts):
+            log.warning(f'For request {request_id} there is missmatch in length of boxes and texts')
+            return
+        request = list(map(lambda box, text: ImageBoxData(box.start_x, box.start_y, box.width, box.height, text),
+                           boxes, texts))
         log.info(f'Sending request with id {request_id} to queue {self.image_data_queue.queue}')
         self.image_data_queue.send(request, QueueService.__create_request_header(request_id))
 

@@ -8,13 +8,6 @@ class ImageBoxData:
     start_y: int
     width: int
     height: int
-
-
-@dataclass
-class ImageData:
-
-    id: str
-    box: list[ImageBoxData]
     text: str
 
 
