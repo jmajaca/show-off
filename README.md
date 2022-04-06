@@ -15,6 +15,10 @@ In essence this is an OCR application.
 Application and it's Kubernetes cluster are hosted on Oracle Cloud ARM architecture server. Application itself can be found 
 at [jmajaca.xyz/show-off](https://jmajaca.xyz/show-off). While APIs documentation is available [here](https://jmajaca.xyz:5000/).
 
+> Note: Model for recognition of text from image is under-performing mostly because of dataset used to train it.
+> As recognition model was not main focus of this project (it was whole system) I decided to release project and repo
+> for public. Currently, I am trying to optimize performance of recognition model.
+
 ## Architecture
 
 ![architecture](doc/images/architecture.png)
@@ -27,8 +31,7 @@ For detection model used is CTPN and for recognition model used is CRNN.
 
 ### Connectioinst Text Proposal Network ([CTPN](https://arxiv.org/abs/1609.03605)) Model
 
-This model can extract regions of text from supplied image. For my implementation I used existing 
-[implementation](https://github.com/courao/ocr.pytorch) written with Pytorch.
+This model can extract regions of text from supplied image. For my implementation I used existing implementations written with Pytorch.
 From said implementation all was "scraped" except necessary parts of code for prediction. 
 Alongside with implementation pretrained weights were also
 downloaded from supplied GitHub repo. It was decided that this approach would be the best considering amount of pre- 
@@ -43,20 +46,30 @@ Source code can be found in folder `detection/python/src/third_party`.
 
 ### Convolutional Recurrent Neural Network ([CRNN](https://arxiv.org/abs/1507.05717)) Model
 
-This model can extract text from supplied image.
+This model can extract text from supplied image. Implementation was done with help of original paper and existing implementations
+like one discussed in [this blog](https://deepayan137.github.io/blog/markdown/2020/08/29/building-ocr.html).
 
-todo: model description + training process
+Model was trained on synthetic dataset and has poor generalization ability. Currently, process of searching for desired
+dataset is in progress. In the meantime, weights trained on synthetic dataset are in use only to show whole system that
+was designed.
+
+On image bellow is shown value of loss function over epochs for validation dataset. Training stopped when validation loss
+was greater than in last 5 epochs. Size of validation loss window is hyperparameter of optimization process.
+
+![Validation Loss](doc/images/validation_loss.png)
+
+Source code can be found in folder `recognition/python/model`.
 
 ## Microservices
 
-| Name                 | Description                                                                 | Language   | Framework   | Source code folder    |
-|----------------------|-----------------------------------------------------------------------------|------------|-------------|-----------------------|
-| **show-off-ui**      | Frontend application that sends images to OCR proccess and displays results | TypeScript | React       | `show-off-ui`         |
-| **show-off-api**     | Backend for Frontend (BFF) application                                      | Python     | Flask       | `show-off-api/python` |
-| **detection-api**    | CTPN Model wrapper for REST calls                                           | Python     | Flask       | `detection/python`    |
-| **recognition-api**  | CRNN Model wrapper for REST calls                                           | Python     | Flask       | `recognition/python`  |
-| **image-api**        | Application that stores images and image data                               | Java       | Spring Boot | `image-api`           |
-| **documentation-ui** | Frontend application for viewing documentation from all APIs at one place   | JavaScript | -           | `documentation-ui`    |
+| Name                 | Description                                                                | Language   | Framework   | Source code folder       |
+|----------------------|----------------------------------------------------------------------------|------------|-------------|--------------------------|
+| **show-off-ui**      | Frontend application that sends images to OCR process and displays results | TypeScript | React       | `show-off-ui`            |
+| **show-off-api**     | Backend for Frontend (BFF) application                                     | Python     | Flask       | `show-off-api/python`    |
+| **detection-api**    | CTPN Model wrapper for REST calls                                          | Python     | Flask       | `detection/python`       |
+| **recognition-api**  | CRNN Model wrapper for REST calls                                          | Python     | Flask       | `recognition/python/api` |
+| **image-api**        | Application that stores images and image data                              | Java       | Spring Boot | `image-api`              |
+| **documentation-ui** | Frontend application for viewing documentation from all APIs at one place  | JavaScript | -           | `documentation-ui`       |
 
 ### show off ui
 
@@ -160,7 +173,7 @@ Postgres database consist of following tables.
 
 | name               | type      | description                                                   |
 |--------------------|-----------|---------------------------------------------------------------|
-| id                 | VARCHAR   | Primary key. UUID value wich is image identification.         |
+| id                 | VARCHAR   | Primary key. UUID value which is image identification.        |
 | path               | VARCHAR   | Path on filesystem to exact file in which the image is saved. |
 | creation_timestamp | TIMESTAMP | The time when was image received to be saved.                 |
 
@@ -171,10 +184,10 @@ Postgres database consist of following tables.
 | id       | SERIAL  | unique autogenerated image_box identification               |
 | start_x  | INTEGER | x-axis coordinate of starting point for box containing text |
 | start_y  | INTEGER | y-axis coordinate of starting point for box containing text |
-| width    | INTEGER | width of box containg text                                  |
-| height   | INTEGER | height of box containg text                                 |
+| width    | INTEGER | width of box that contains text                             |
+| height   | INTEGER | height of box that contains text                            |
 | text     | VARCHAR | text extracted from text box                                |
-| image_id | VARCHAR | Foregin key. UUID value wich is image identification.       |
+| image_id | VARCHAR | Foreign key. UUID value which is image identification.      |
 
 #### text_correction
 
@@ -182,7 +195,7 @@ Postgres database consist of following tables.
 |----------|---------|-----------------------------------------------------|
 | id       | SERIAL  | unique autogenerated text_correction identification |
 | value    | VARCHAR | text correction for image                           |
-| image_id | VARCHAR | UUID value wich is image identification.            |
+| image_id | VARCHAR | UUID value which is image identification.           |
 
 ## Networking
 
@@ -196,6 +209,9 @@ todo
 
 ## TODOs
 
-- [ ] frontend rectangle of user interest
-- [ ] detection performance
+- [ ] enable user to select region of interest in image before sending it
+- [ ] improve detection model performance in terms of speed
+- [ ] improve recognition model performance with training on better suited training dataset
 - [ ] golang implementation of apis
+- [ ] include test checks in CI-CD process
+- [ ] write Networking section of documentation
