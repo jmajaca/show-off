@@ -1,5 +1,6 @@
 package hr.show.listener;
 
+import hr.show.message.ImageBoxDataQueueMessage;
 import hr.show.message.ImageDataQueueMessage;
 import hr.show.message.TextCorrectionQueueMessage;
 import hr.show.exception.InvalidImageDataQueueMessage;
@@ -12,6 +13,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Component
 public class ImageQueueListener {
@@ -36,13 +38,13 @@ public class ImageQueueListener {
     }
 
     @RabbitListener(queues = "imageDataQueue")
-    public void receiveImageData(@Valid ImageDataQueueMessage imageDataQueueMessage, @Header("request_id") String requestId) {
-        log.info("Received image data with id '{}' from image queue", imageDataQueueMessage.getId());
+    public void receiveImageData(@Valid List<ImageBoxDataQueueMessage> imageBoxDataMessage, @Header("request_id") String requestId) {
+        log.info("Received image data with id '{}' from image queue", requestId);
         try {
-            if (!requestId.equals(imageDataQueueMessage.getId())) {
-                throw new InvalidImageDataQueueMessage(imageDataQueueMessage.getId(), requestId);
+            if (requestId == null || requestId.equals("")) {
+                throw new InvalidImageDataQueueMessage(requestId);
             }
-            imageService.saveDataImage(imageDataQueueMessage);
+            imageService.saveDataImage(imageBoxDataMessage, requestId);
         } catch (Exception e) {
             log.error("Error has occurred while saving image data from queue: ", e);
         }

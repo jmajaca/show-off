@@ -13,6 +13,7 @@ public class ImageBoxDataQueueDtoToImageBoxMapper {
         imageBox.setStartY(dto.getStartY());
         imageBox.setHeight(dto.getHeight());
         imageBox.setWidth(dto.getWidth());
+        imageBox.setText(dto.getText());
         return imageBox;
     }
 

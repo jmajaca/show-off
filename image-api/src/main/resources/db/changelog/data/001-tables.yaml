@@ -91,6 +91,7 @@ databaseChangeLog:
                     type: int
                     constraints:
                       nullable: false
+                    afterColumn: start_x
           - dropUniqueConstraint:
               tableName: text_correction
               constraintName: image_text_correction_foregin_key

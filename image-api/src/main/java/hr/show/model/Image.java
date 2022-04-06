@@ -35,6 +35,14 @@ public class Image {
     @OneToOne(mappedBy="image", cascade = CascadeType.ALL)
     private TextCorrection textCorrection;
 
+    public void addImage(ImageBox box) {
+        if (boxes == null) {
+            return;
+        }
+        box.setImage(this);
+        boxes.add(box);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
