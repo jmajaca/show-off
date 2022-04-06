@@ -10,6 +10,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from typing import Tuple
 
+from api_schemas import *
 from detection_service import DetectionService
 from exceptions import InvalidImageError
 
@@ -17,7 +18,7 @@ app = Flask(__name__, static_folder='static')
 CORS(app)
 
 spec = APISpec(
-    title='Show Off API',
+    title='Detection API',
     version='v1',
     plugins=[FlaskPlugin(), MarshmallowPlugin()],
     openapi_version='3.0.3'
@@ -30,6 +31,10 @@ def determine_boxes():
     ---
     post:
       description: For given image return text boxes
+      requestBody:
+        content:
+          multipart/form-data:
+            schema: TextBoxRequestSchema
       responses:
         200:
           description: Process of determining text boxes completed successfully
@@ -38,6 +43,9 @@ def determine_boxes():
               schema: TextBoxSchema
         400:
           description: Invalid image has been sent
+          content:
+            application/json:
+              schema: ErrorSchema
         500:
           description: Error occurred while in process of determining text boxes
     """
@@ -60,11 +68,21 @@ def determine_minimal_boxes():
     ---
     post:
       description: For given image return minimal text boxes
+      requestBody:
+        content:
+          multipart/form-data:
+            schema: TextBoxRequestSchema
       responses:
         200:
           description: Process of determining minimal text boxes completed successfully
+          content:
+            application/json:
+              schema: MinimalTextBoxSchema
         400:
           description: Invalid image has been sent
+          content:
+            application/json:
+              schema: ErrorSchema
         500:
           description: Error occurred while in process of determining minimal text boxes
     """
@@ -90,6 +108,8 @@ def check_health():
       responses:
         200:
           description: App is running
+        500:
+          description: App is not running
     """
     return '', 200
 
@@ -105,6 +125,7 @@ def create_error_response(e: Exception, status: int) -> Tuple[dict, int]:
 
 with app.test_request_context():
     spec.path(view=determine_boxes)
+    spec.path(view=determine_minimal_boxes)
     spec.path(view=check_health)
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
