@@ -250,4 +250,3 @@ server {
 - [ ] improve recognition model performance with training on a better suited training dataset
 - [ ] golang implementation of apis
 - [ ] include test checks in the CI-CD process
-- [ ] write Networking section of the documentation
