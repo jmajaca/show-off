@@ -55,10 +55,10 @@ def determine_boxes():
         result = DetectionService.configure_box_response(image_string)
         return jsonify(result), 200
     except InvalidImageError as e:
-        logging.warning('Invalid image file sent', e)
+        logging.warning('Invalid image file sent', exc_info=True)
         return create_error_response(e, 400)
     except Exception as e:
-        logging.error('Error occurred while determining text boxes', e)
+        logging.error('Error occurred while determining text boxes', exc_info=True)
         return create_error_response(e, 500)
 
 
@@ -92,10 +92,10 @@ def determine_minimal_boxes():
         result = DetectionService.configure_box_response(image_string, 'minimal')
         return jsonify(result), 200
     except InvalidImageError as e:
-        logging.warning('Invalid image file sent', e)
+        logging.warning('Invalid image file sent', exc_info=True)
         return create_error_response(e, 400)
     except Exception as e:
-        logging.error('Error occurred while determining minimal text boxes', e)
+        logging.error('Error occurred while determining minimal text boxes', exc_info=True)
         return create_error_response(e, 500)
 
 
