@@ -5,7 +5,7 @@ items:
     kind: ConfigMap
     metadata:
       name: default-config
-      namespace: iskon-infra
+      namespace: show-off-infra
     data:
       default.conf: |
         http {
