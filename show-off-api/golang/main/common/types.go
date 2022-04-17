@@ -1,4 +1,4 @@
-package main
+package common
 
 import "time"
 
@@ -8,6 +8,11 @@ type ErrorResponse struct {
 }
 
 type ReadResponse struct {
+	Id   string `json:"id"`
+	Text string `json:"text"`
+}
+
+type TextCorrectionRequest struct {
 	Id   string `json:"id"`
 	Text string `json:"text"`
 }
