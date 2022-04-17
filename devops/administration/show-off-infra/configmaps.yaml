@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: default-config
+      namespace: show-off-infra
+    data:
+      default.conf: |
+        
+        upstream backend {
+          server show-off-api.show-off.svc.cluster.local:5000;
+          server show-off-api-go.show-off.svc.cluster.local:8080;
+        }
+        
+        server {
+          location / {
+            proxy_pass http://backend;
+          }
+        }
+metadata:
+  resourceVersion: ""
