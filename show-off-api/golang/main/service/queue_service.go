@@ -3,9 +3,9 @@ package service
 import (
 	"encoding/json"
 	"github.com/streadway/amqp"
-	"golang/main/api"
-	"golang/main/common"
 	"log"
+	"main/api"
+	"main/common"
 	"os"
 )
 

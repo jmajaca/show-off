@@ -2,9 +2,9 @@ package service
 
 import (
 	"bytes"
-	"golang/main/api"
 	"image"
 	"image/jpeg"
+	"main/api"
 	"mime/multipart"
 )
 

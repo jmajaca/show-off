@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"github.com/google/uuid"
-	"golang/main/api"
-	"golang/main/common"
-	"golang/main/service"
+	"main/api"
+	"main/common"
+	"main/service"
 	"net/http"
 	"os"
 	"strings"
