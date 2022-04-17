@@ -43,6 +43,7 @@ func health(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func read(w http.ResponseWriter, r *http.Request) {
@@ -93,6 +94,7 @@ func read(w http.ResponseWriter, r *http.Request) {
 		common.CreateErrorResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func correctText(w http.ResponseWriter, r *http.Request) {
@@ -113,8 +115,8 @@ func correctText(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	http.HandleFunc("/health", health)
-	http.HandleFunc("/read", read)
-	http.HandleFunc("/correct-text", correctText)
+	http.HandleFunc("/read", WrapWithLogs(read))
+	http.HandleFunc("/correct-text", WrapWithLogs(correctText))
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {

@@ -23,7 +23,7 @@ func (api RecognitionAPI) ExtractText(images [][]byte) (RecognitionResponse, err
 	headers := map[string]string{"Content-Type": contentType}
 	responseCode, err := post(api.Client, api.Url+"/extract", requestBody, &result, headers)
 	if responseCode != http.StatusOK {
-		fmt.Println("problem")
+		return RecognitionResponse{}, fmt.Errorf("recognition API responded with status %d", responseCode)
 	}
 	return result, nil
 }

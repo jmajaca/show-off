@@ -19,7 +19,7 @@ func (api DetectionAPI) GetMinimalTextBoxes(img []byte) (MinimalTextBoxes, error
 	headers := map[string]string{"Content-Type": contentType}
 	responseCode, err := post(api.Client, api.Url+"/minimal-boxes", requestBody, &result, headers)
 	if responseCode != http.StatusOK {
-		fmt.Println("problem")
+		return nil, fmt.Errorf("detection API responded with status %d", responseCode)
 	}
 	return result, nil
 }
