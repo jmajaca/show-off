@@ -2,13 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: show-off-api-lb
+  namespace: show-off-infra
   labels:
     app: show-off-api-lb
     type: infra
 spec:
   ports:
-  - port: 5432
-    targetPort: 5432
+  - port: 80
+    targetPort: 80
     protocol: TCP
   selector:
     app: show-off-api-lb
