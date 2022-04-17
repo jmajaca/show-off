@@ -57,5 +57,7 @@ func (w *LoggingResponseWriter) Write(b []byte) (int, error) {
 
 func (w *LoggingResponseWriter) WriteHeader(statusCode int) {
 	w.responseData.status = statusCode
-	w.ResponseWriter.WriteHeader(statusCode)
+	if statusCode != http.StatusOK {
+		w.ResponseWriter.WriteHeader(statusCode)
+	}
 }
