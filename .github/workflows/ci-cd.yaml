@@ -30,11 +30,11 @@ jobs:
           echo "PROJECT_CONTEXT=show-off-api/python" >> $GITHUB_ENV
           echo "LANGUAGE=python" >> $GITHUB_ENV
       -
-	name: Check if project is show-off-api-go
-	if: github.ref_name == 'show-off-api-go'
-	run: |
-	  echo "PROJECT=show-off-api-go" >> $GITHUB_ENV
-          echo "PROJECT_CONTEXT=show-off-api/golang" >> $GITHUB_ENV
+        name: Check if project is show-off-api-go
+        if: github.ref_name == 'show-off-api-go'
+        run: |
+          echo "PROJECT=show-off-api-go" >> $GITHUB_ENV
+          echo "PROJECT_CONTEXT=show-off-api/golang/main" >> $GITHUB_ENV
           echo "LANGUAGE=go" >> $GITHUB_ENV
       -
         name: Check if project is recognition-api
