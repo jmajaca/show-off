@@ -12,4 +12,4 @@ RUN go build -o /show-off-api
 
 EXPOSE 8080
 
-ENTRYPOINT ./show-off-api
+ENTRYPOINT /show-off-api
