@@ -27,5 +27,18 @@ items:
             - namespaceSelector:
                 matchLabels:
                   namespace: show-off
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: show-off-api-lb-allow-show-off
+    spec:
+      podSelector:
+        matchLabels:
+          app: show-off-api-lb
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  namespace: show-off
 metadata:
   resourceVersion: ""
