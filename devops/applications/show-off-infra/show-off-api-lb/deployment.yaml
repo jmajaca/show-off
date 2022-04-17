@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: show-off-api-lb
+  labels:
+    app: show-off-api-lb
+    type: infra
+spec:
+  selector:
+    matchLabels:
+      app: show-off-api-lb
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: show-off-api-lb
+        type: infra
+    spec:
+      containers:
+      - name: show-off-api-lb
+        image: arm64v8/nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/nginx/conf.d/default.conf
+            subPath: default.conf
+      volumes:
+        - name: config-volume
+          configMap:
+            name: default-config
