@@ -8,19 +8,15 @@ items:
       namespace: show-off-infra
     data:
       default.conf: |
-        http {
+        upstream backend {
+          server show-off-api.show-off.svc.cluster.local;
+          server show-off-api-go.show-off.svc.cluster.local;
+        }
         
-          upstream backend {
-            server show-off-api.show-off.svc.cluster.local;
-            server show-off-api-go.show-off.svc.cluster.local;
+        server {
+          location / {
+            proxy_pass http://backend;
           }
-          
-          server {
-            location / {
-              proxy_pass http://backend;
-            }
-          }
-        
         }
 metadata:
   resourceVersion: ""
