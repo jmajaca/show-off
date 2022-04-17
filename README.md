@@ -1,9 +1,9 @@
 # Project: **show-off**
 
-![ArgoCD](doc/logos/argocd.png) ![Docker](doc/logos/docker.png) ![Flask](doc/logos/flask.png) ![GitHub Actions](doc/logos/github_actions.png) 
-![Java](doc/logos/java.png) ![Kubernetes](doc/logos/kubernetes.png) ![Minikube](doc/logos/minikube.png) ![PostgreSQL](doc/logos/postgre.png)
-![Python](doc/logos/python.png) ![Pytorch](doc/logos/pytorch.png) ![RabbitMQ](doc/logos/rabbit.png) ![React](doc/logos/react.png) 
-![Spring Boot](doc/logos/spring_boot.png) ![Typescript](doc/logos/typescript.png) 
+![ArgoCD](doc/logos/argocd.png) ![Docker](doc/logos/docker.png) ![Flask](doc/logos/flask.png) ![GitHub Actions](doc/logos/github_actions.png)
+![Go](doc/logos/golang.png) ![Java](doc/logos/java.png) ![Kubernetes](doc/logos/kubernetes.png) ![Minikube](doc/logos/minikube.png)
+![nginx](doc/logos/nginx.png) ![PostgreSQL](doc/logos/postgre.png) ![Python](doc/logos/python.png) ![Pytorch](doc/logos/pytorch.png) 
+![RabbitMQ](doc/logos/rabbit.png) ![React](doc/logos/react.png) ![Spring Boot](doc/logos/spring_boot.png) ![Typescript](doc/logos/typescript.png) 
 
 ## About
 
@@ -66,6 +66,7 @@ Source code can be found in folder `recognition/python/model`.
 |----------------------|----------------------------------------------------------------------------|------------|-------------|--------------------------|
 | **show-off-ui**      | Frontend application that sends images to OCR process and displays results | TypeScript | React       | `show-off-ui`            |
 | **show-off-api**     | Backend for Frontend (BFF) application                                     | Python     | Flask       | `show-off-api/python`    |
+| **show-off-api-go**  | Backend for Frontend (BFF) application written in Golang                   | Go         | -           | `show-off-api/golang`    |
 | **detection-api**    | CTPN Model wrapper for REST calls                                          | Python     | Flask       | `detection/python`       |
 | **recognition-api**  | CRNN Model wrapper for REST calls                                          | Python     | Flask       | `recognition/python/api` |
 | **image-api**        | Application that stores images and image data                              | Java       | Spring Boot | `image-api`              |
@@ -90,6 +91,10 @@ Other services with which this application interacts are detection-api and recog
 three queues for asynchronous calls. If one of the synchronous calls fails the whole process fails and if one asynchronous
 process fails it will have no impact on the process itself. Asynchronous calls on queues are used to store data about
 an image and its data in form of text placement and extraction.
+
+Implementation is created with Python and Flask (`show-off-api` image) and with Go (`show-off-api-go` image). Both implementations
+have the same endpoints and logic. In front of these two instances lies the nginx load balancer `show-off-api-lb` which uses
+the round-robin method for forwarding requests to APIs.
 
 Documentation of API endpoints can be found [here](https://jmajaca.xyz:5000/#show-off-api).
 
@@ -249,5 +254,6 @@ server {
 - [ ] improve detection model performance in terms of speed
 - [ ] improve recognition model performance with training on a better suited training dataset
 - [ ] golang implementation of apis
+- [ ] doc for golang implementation of show-off-api
 - [ ] include test checks in the CI-CD process
 - [ ] write Networking section of the documentation
