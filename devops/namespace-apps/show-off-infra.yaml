@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: show-off-infra
+  namespace: argocd
+spec:
+  project: show-off-infra
+  source:
+    directory:
+      jsonnet: { }
+      recurse: true
+    repoURL: git@github.com:jmajaca/show-off.git
+    targetRevision: devops
+    path: devops/administration/show-off-infra
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: show-off-infra
+  syncPolicy:
+    automated: { }
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><enunciate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://enunciate.webcohesion.com/schemas/enunciate-2.11.0.xsd" version="unspecified" slug="image-api">
+    <title>image-api</title>
+    <description/>
+    <contact>josip.majaca@gmail.com</contact>
+    <modules>
+        <docs css="enunciate.css" disabled="false"/>
+        <java-json-client disabled="true"/>
+        <javascript-client disabled="true"/>
+        <c-xml-client disabled="true"/>
+        <csharp-xml-client disabled="true"/>
+        <gwt-json-overlay disabled="true"/>
+        <java-xml-client disabled="true"/>
+        <obj-c-xml-client disabled="true"/>
+        <php-json-client disabled="true"/>
+        <php-xml-client disabled="true"/>
+        <ruby-json-client disabled="true"/>
+
+        <!-- https://github.com/stoicflame/enunciate/issues/502 disables just preview of example box -->
+
+    </modules>
+</enunciate>

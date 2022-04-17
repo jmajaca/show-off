@@ -12,5 +12,7 @@ def check_health():
       responses:
         200:
           description: App is running
+        500:
+          description: App is not running
     """
     return '', 200

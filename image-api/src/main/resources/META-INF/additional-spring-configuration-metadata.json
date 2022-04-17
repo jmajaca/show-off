@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "file.path",
+      "type": "java.lang.String",
+      "description": "Path in which image files will be saved."
+    },
+    {
+      "name": "file.max-age",
+      "type": "java.lang.Integer",
+      "description": "Max age of file in days after which it will be deleted."
+    }
+  ]
+}

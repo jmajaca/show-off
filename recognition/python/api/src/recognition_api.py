@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from apispec import APISpec
@@ -16,8 +17,10 @@ app.register_blueprint(recognition_endpoint)
 
 CORS(app)
 
+logging.basicConfig(level=logging.INFO)
+
 spec = APISpec(
-    title='Show Off API',
+    title='Recognition API',
     version='v1',
     plugins=[FlaskPlugin(), MarshmallowPlugin()],
     openapi_version='3.0.3'
@@ -25,8 +28,8 @@ spec = APISpec(
 
 
 with app.test_request_context():
-    spec.path(view=check_health)
     spec.path(view=extract)
+    spec.path(view=check_health)
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 with open(dir_path + '/static/swagger.json', 'w') as f:

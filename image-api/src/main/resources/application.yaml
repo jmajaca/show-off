@@ -1,0 +1,11 @@
+spring:
+  liquibase:
+    enabled: true
+
+logbook:
+  exclude:
+    - '**/actuator/**'
+
+logging:
+  level:
+    org.zalando.logbook: TRACE

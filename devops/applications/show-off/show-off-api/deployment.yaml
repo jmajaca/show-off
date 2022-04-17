@@ -31,6 +31,51 @@ spec:
               configMapKeyRef:
                 name: internal-urls
                 key: recognition_api_url
+          - name: QUEUE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: queues
+                key: host
+          - name: QUEUE_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: queues
+                key: port
+          - name: QUEUE_VIRTUAL_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: queues
+                key: virtual_host
+          - name: QUEUE_EXCHANGE
+            valueFrom:
+              configMapKeyRef:
+                name: queues
+                key: exchange
+          - name: IMAGE_QUEUE_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: queues
+                key: image_queue
+          - name: IMAGE_DATA_QUEUE_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: queues
+                key: image_data_queue
+          - name: TEXT_CORRECTION_QUEUE_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: queues
+                key: text_correction_queue
+          - name: QUEUE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: show-off-api-rabbit-mq-credentials
+                key: username
+          - name: QUEUE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: show-off-api-rabbit-mq-credentials
+                key: password
         ports:
         - containerPort: 5000
         readinessProbe:

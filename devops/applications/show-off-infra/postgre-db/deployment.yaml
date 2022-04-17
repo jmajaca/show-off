@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgre-db
+  labels:
+    app: postgre-db
+    type: infra
+spec:
+  selector:
+    matchLabels:
+      app: postgre-db
+  replicas: 1
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: postgre-db
+        type: infra
+    spec:
+      containers:
+      - name: postgre-db
+        image: arm64v8/postgres:14
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgre-db-credentials
+                key: password
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: postgre-db-credentials
+                key: database
+        ports:
+        - containerPort: 5432
+        livenessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 20
+          periodSeconds: 5
+# TODO mount volume

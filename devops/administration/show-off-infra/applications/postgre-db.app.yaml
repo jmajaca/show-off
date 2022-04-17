@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgre-db
+  namespace: argocd
+spec:
+  project: show-off-infra
+  source:
+    directory:
+      jsonnet: { }
+      recurse: true
+    repoURL: git@github.com:jmajaca/show-off.git
+    targetRevision: devops
+    path: devops/applications/show-off-infra/postgre-db
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: show-off-infra
+  syncPolicy:
+    automated: { }
