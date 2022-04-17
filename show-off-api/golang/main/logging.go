@@ -24,7 +24,7 @@ func WrapWithLogs(handler http.HandlerFunc) http.HandlerFunc {
 
 		log.Println(fmt.Sprintf(incomingMsg, id, host, method, uri, protocol))
 
-		responseData := &ResponseData{}
+		responseData := &ResponseData{status: 200}
 
 		lrw := LoggingResponseWriter{
 			ResponseWriter: w,
@@ -57,7 +57,7 @@ func (w *LoggingResponseWriter) Write(b []byte) (int, error) {
 
 func (w *LoggingResponseWriter) WriteHeader(statusCode int) {
 	w.responseData.status = statusCode
-	if statusCode != http.StatusOK {
+	if statusCode != http.StatusOK { // when calling Write status 200 is set
 		w.ResponseWriter.WriteHeader(statusCode)
 	}
 }
