@@ -9,11 +9,11 @@ import (
 	"time"
 )
 
-func createErrorResponse(w http.ResponseWriter, err error, statusCode int) {
+func createErrorResponse(w http.ResponseWriter, description string, statusCode int) {
 	w.WriteHeader(statusCode)
 	w.Header().Set("Content-Type", "application/json")
-	body := ErrorResponse{Error: err.Error(), Timestamp: time.Now()}
-	err = json.NewEncoder(w).Encode(body)
+	body := ErrorResponse{Error: description, Timestamp: time.Now()}
+	err := json.NewEncoder(w).Encode(body)
 	if err != nil {
 		return
 	}

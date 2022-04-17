@@ -8,3 +8,7 @@ type MinimalTextBox struct {
 }
 
 type MinimalTextBoxes []MinimalTextBox
+
+type RecognitionResponse struct {
+	Tokens []string `json:"tokens"`
+}
