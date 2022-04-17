@@ -256,4 +256,3 @@ server {
 - [ ] golang implementation of apis
 - [ ] doc for golang implementation of show-off-api
 - [ ] include test checks in the CI-CD process
-- [ ] write Networking section of the documentation
