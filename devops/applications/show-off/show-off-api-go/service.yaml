@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: show-off-api-go
+  labels:
+    app: show-off-api-go
+    type: backend-golang
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: show-off-api-go

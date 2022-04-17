@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: show-off-api-go
+  namespace: argocd
+spec:
+  project: show-off
+  source:
+    directory:
+      jsonnet: { }
+      recurse: true
+    repoURL: git@github.com:jmajaca/show-off.git
+    targetRevision: devops
+    path: devops/applications/show-off/show-off-api-go
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: show-off
+  syncPolicy:
+    automated: { }
