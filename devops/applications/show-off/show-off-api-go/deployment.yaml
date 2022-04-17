@@ -69,12 +69,12 @@ spec:
           - name: QUEUE_USERNAME
             valueFrom:
               secretKeyRef:
-                name: show-off-api-go-rabbit-mq-credentials
+                name: show-off-api-rabbit-mq-credentials
                 key: username
           - name: QUEUE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: show-off-api-go-rabbit-mq-credentials
+                name: show-off-api-rabbit-mq-credentials
                 key: password
         ports:
         - containerPort: 8080
