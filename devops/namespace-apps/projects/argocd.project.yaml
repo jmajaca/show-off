@@ -17,4 +17,4 @@ spec:
   orphanedResources:
     warn: true
   sourceRepos:
-    - 'git@github.com:jmajaca/show-off.git'
+    - 'https://github.com/jmajaca/show-off.git'
