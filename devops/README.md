@@ -43,8 +43,11 @@ ArgoCD UI view on `detection-api` application and `show-off` namespace represent
 Here is how manifest of root app of apps called `platform` looks like:
 ```yaml
 project: argocd
+meta:
+  name: platform
+  namespace: argocd
 source:
-  repoURL: 'git@github.com:jmajaca/show-off.git'
+  repoURL: 'https://github.com/jmajaca/show-off.git'
   path: devops/namespace-apps
   targetRevision: devops
 destination:
