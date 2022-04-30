@@ -14,6 +14,8 @@ Implemented system and applications are reading text from supplied images and re
 Application and its Kubernetes cluster are hosted on Oracle Cloud ARM architecture server. The application itself can be found at
 [jmajaca.xyz/show-off](https://jmajaca.xyz/show-off). While APIs documentation is available [here](https://jmajaca.xyz:5000/).
 
+Kubernetes cluster can be 100% bootstrapped with `bootstrap.sh` script.
+
 > Note: The model for recognition of text from an image is under-performing mostly because of the dataset used to train it.
 > As the recognition model was not the main focus of this project (it was the whole system) I decided to release the project 
 > and repo to the public. Currently, I am trying to optimize the performance of the recognition model.
