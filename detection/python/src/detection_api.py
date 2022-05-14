@@ -45,7 +45,6 @@ tracing = FlaskTracer(tracer=lambda: initialize_tracer(), trace_all_requests=Tru
 
 
 @app.route('/boxes', methods=['POST'])
-@tracing.trace()
 def determine_boxes():
     """Endpoint for determining text boxes on image
     ---
@@ -83,7 +82,6 @@ def determine_boxes():
 
 
 @app.route('/minimal-boxes', methods=['POST'])
-@tracing.trace()
 def determine_minimal_boxes():
     """Endpoint for determining minimal text boxes on image
     ---
@@ -108,6 +106,7 @@ def determine_minimal_boxes():
           description: Error occurred while in process of determining minimal text boxes
     """
     try:
+        logging.info(request.headers)
         files = request.files.to_dict()
         image_string = DetectionService.read_image_as_string(files)
         result = DetectionService.configure_box_response(image_string, 'minimal')
