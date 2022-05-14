@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: detection-api
   annotations:
-    "sidecar.jaegertracing.io/inject": "true"
+    sidecar.jaegertracing.io/inject: "true"
   labels:
     app: detection-api
     type: backend-python

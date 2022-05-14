@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: image-api
   annotations:
-    "sidecar.jaegertracing.io/inject": "true"
+    sidecar.jaegertracing.io/inject: "true"
   labels:
     app: image-api
     type: backend-java

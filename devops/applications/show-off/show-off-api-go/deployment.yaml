@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: show-off-api-go
   annotations:
-    "sidecar.jaegertracing.io/inject": "true"
+    sidecar.jaegertracing.io/inject: "true"
   labels:
     app: show-off-api-go
     type: backend-golang
