@@ -1,13 +1,12 @@
 import pytest
 
-from main import create_app
+from main import app
 
 resource_file = 'resources'
 
 
 @pytest.fixture()
 def app():
-    app = create_app()
     app.config.update({
         'TESTING': True
     })

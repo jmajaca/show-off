@@ -8,7 +8,6 @@ from flask import Blueprint, request
 from flask_cors import cross_origin
 
 from api.api import DetectionAPI, RecognitionAPI
-from main import tracing
 from services.image_service import ImageService
 from services.queue_service import QueueService
 
@@ -23,7 +22,6 @@ queue_service = QueueService()
 
 
 @ocr_endpoint.route('/read', methods=['POST'])
-@tracing.trace()
 @cross_origin()
 def read_image():
     """Endpoint for submitting image with text so that text can be extracted
@@ -75,7 +73,6 @@ def read_image():
 
 
 @ocr_endpoint.route('/correct-text', methods=['POST'])
-@tracing.trace()
 @cross_origin()
 def correct_text():
     """Endpoint for submitting text correction
