@@ -7,6 +7,7 @@ import hr.show.service.ImageService;
 import io.opentracing.*;
 import io.opentracing.propagation.Format;
 import io.opentracing.propagation.TextMap;
+import io.opentracing.propagation.TextMapAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -35,7 +36,7 @@ public class ImageQueueListener {
     @RabbitListener(queues = "imageQueue")
     public void receiveImage(byte[] image,
                              @Header("request_id") String requestId,
-                             @Header("trace") TextMap carrier) {
+                             @Header("trace") TextMapAdapter carrier) {
         Scope scope = activateSpan("receiveImage", carrier);
         log.info("Received image with id '{}' from image queue", requestId);
         try {
@@ -49,7 +50,7 @@ public class ImageQueueListener {
     @RabbitListener(queues = "imageDataQueue")
     public void receiveImageData(@Valid List<ImageBoxDataQueueMessage> imageBoxDataMessage,
                                  @Header("request_id") String requestId,
-                                 @Header("trace") TextMap carrier) {
+                                 @Header("trace") TextMapAdapter carrier) {
         Scope scope = activateSpan("receiveImageData", carrier);
         log.info("Received image data with id '{}' from image queue", requestId);
         try {
@@ -66,7 +67,7 @@ public class ImageQueueListener {
     @RabbitListener(queues = "textCorrectionQueue")
     public void receiveTextCorrection(@Valid TextCorrectionQueueMessage correctionDto,
                                       @Header("request_id") String requestId,
-                                      @Header("trace") TextMap carrier) {
+                                      @Header("trace") TextMapAdapter carrier) {
         Scope scope = activateSpan("textCorrectionQueue", carrier);
         log.info("Received text correction for image with id '{}' from text correction queue", correctionDto.getId());
         try {
@@ -78,7 +79,7 @@ public class ImageQueueListener {
     }
 
     private Scope activateSpan(String operationName, TextMap carrier) {
-        SpanContext receivedSpan = tracer.extract(Format.Builtin.TEXT_MAP, carrier);
+        SpanContext receivedSpan = tracer.extract(Format.Builtin.TEXT_MAP_EXTRACT, carrier);
         Span span = tracer.buildSpan(operationName)
                 .addReference(References.FOLLOWS_FROM, receivedSpan)
                 .start();
