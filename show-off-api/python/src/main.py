@@ -59,9 +59,8 @@ def initialize_tracer() -> opentracing.Tracer:
 
 
 app = create_app()
+tracer = FlaskTracer(tracer=lambda: initialize_tracer(), trace_all_requests=True, app=app)
 CORS(app)
-flask_tracer = FlaskTracer(tracer=initialize_tracer(), trace_all_requests=True, app=app)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
