@@ -33,7 +33,8 @@ public class ImageQueueListener {
     }
 
     @RabbitListener(queues = "imageQueue")
-    public void receiveImage(byte[] image, @Header("request_id") String requestId,
+    public void receiveImage(byte[] image,
+                             @Header("request_id") String requestId,
                              @Header("trace") TextMap carrier) {
         Scope scope = activateSpan("receiveImage", carrier);
         log.info("Received image with id '{}' from image queue", requestId);
