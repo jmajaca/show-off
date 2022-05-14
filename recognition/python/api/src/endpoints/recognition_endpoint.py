@@ -16,7 +16,6 @@ log = logging.getLogger(__name__)
 
 
 @recognition_endpoint.route('/extract', methods=['POST'])
-@tracing.trace()
 def extract():
     """Endpoint for extracting text from images
     ---
