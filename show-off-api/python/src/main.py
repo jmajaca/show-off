@@ -47,11 +47,13 @@ def create_app():
 
 def initialize_tracer() -> opentracing.Tracer:
     config = Config(config={
-        'sampler': {
-            'type': 'const',
-            'param': 1
-        }
-    }, service_name='show-off-api')
+            'sampler': {
+                'type': 'const',
+                'param': 1
+            },
+            'logging': True,
+            'reporter_batch_size': 1,
+        }, service_name='show-off-api')
     return config.initialize_tracer()
 
 
