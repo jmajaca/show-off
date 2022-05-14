@@ -32,9 +32,9 @@ class Queue(ABC):
         self.exchange = exchange
 
     def _send_json(self, payload: dict | list, headers: dict):
-        with tracing.start_span('Send JSON via queue', child_of=get_current_span()) as span:
+        with tracing.tracer.start_span('Send JSON via queue', child_of=get_current_span()) as span:
             carrier = {}
-            tracing.inject(span_context=span, format=opentracing.Format.TEXT_MAP, carrier=carrier)
+            tracing.tracer.inject(span_context=span, format=opentracing.Format.TEXT_MAP, carrier=carrier)
             headers['trace'] = carrier
             connection = pika.BlockingConnection(self.__connection_params)
             channel = connection.channel()
@@ -43,9 +43,9 @@ class Queue(ABC):
             connection.close()
 
     def _send_bytes(self, payload: bytes, headers: dict):
-        with tracing.start_span('Send bytes via queue', child_of=get_current_span()) as span:
+        with tracing.tracer.start_span('Send bytes via queue', child_of=get_current_span()) as span:
             carrier = {}
-            tracing.inject(span_context=span, format=opentracing.Format.TEXT_MAP, carrier=carrier)
+            tracing.tracer.inject(span_context=span, format=opentracing.Format.TEXT_MAP, carrier=carrier)
             headers['trace'] = carrier
             connection = pika.BlockingConnection(self.__connection_params)
             channel = connection.channel()
