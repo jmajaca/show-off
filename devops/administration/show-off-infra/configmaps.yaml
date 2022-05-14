@@ -33,69 +33,131 @@ items:
           {
             rabbitmq_management, [ {load_definitions, "/etc/rabbitmq/definitions.json"} ]
           }
-        ]
+        ].
       definitions.json: |
         {
-         "users": [
-          {
-           "name": "show-off-api",
-           "password_hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-           "hashing_algorithm": "rabbit_password_hashing_sha256",
-           "tags": ""
-          },
-          {
-           "name": "image-api",
-           "password_hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-           "hashing_algorithm": "rabbit_password_hashing_sha256",
-           "tags": ""
-          }
-         ],
-         "vhosts": [
-          {
-           "name": "show-off"
-          }
-         ],
-         "permissions": [
-          {
-           "user": "show-off-api",
-           "vhost": "show-off",
-           "configure": ".*",
-           "write": ".*",
-           "read": ".*"
-          },
-          {
-           "user": "image-api",
-           "vhost": "show-off",
-           "configure": ".*",
-           "write": ".*",
-           "read": ".*"
-          }
-         ],
-         "parameters": [],
-         "policies": [],
-         "queues": [
-          {
-           "name": "imageQueue",
-           "vhost": "show-off",
-           "durable": true,
-           "auto_delete":false,
-           "arguments": {}
-          },
-          {
-           "name": "imageDataQueue",
-           "vhost": "show-off",
-           "durable": true,
-           "auto_delete":false,
-           "arguments": {}
-          },
-          {
-           "name": "textCorrectionQueue",
-           "vhost": "show-off",
-           "durable": true,
-           "auto_delete":false,
-           "arguments": {}
-          }
-         ],
-         "exchanges": [],
-         "bindings": []
+          "rabbit_version":"3.10.1",
+          "rabbitmq_version":"3.10.1",
+          "product_name":"RabbitMQ",
+          "product_version":"3.10.1",
+          "users":[
+            {
+              "name":"admin",
+              "password_hash":"d9srHc5WQHTB7CN4ge37hcSy3gytNzyxO+Fs+SXp6I5PG0Jl",
+              "hashing_algorithm":"rabbit_password_hashing_sha256",
+              "tags":[
+                "administrator"
+              ],
+              "limits":{
+              
+              }
+            },
+            {
+              "name":"show-off-api",
+              "password_hash":"Z89iLXrYeEVXjoWacqT/6Vnce2P2awTPDi64TkeGrcgPXS5V",
+              "hashing_algorithm":"rabbit_password_hashing_sha256",
+              "tags":[
+              
+              ],
+              "limits":{
+              
+              }
+            },
+            {
+              "name":"image-api",
+              "password_hash":"Bz2tvPaZ2qAseroajGkle6TVMyrxczHcInC8k41AUMNTq/Ia",
+              "hashing_algorithm":"rabbit_password_hashing_sha256",
+              "tags":[
+              
+              ],
+              "limits":{
+              
+              }
+            }
+          ],
+          "vhosts":[
+            {
+              "name":"/"
+            },
+            {
+              "name":"show-off"
+            }
+          ],
+          "permissions":[
+            {
+              "user":"image-api",
+              "vhost":"show-off",
+              "configure":".*",
+              "write":".*",
+              "read":".*"
+            },
+            {
+              "user":"admin",
+              "vhost":"/",
+              "configure":".*",
+              "write":".*",
+              "read":".*"
+            },
+            {
+              "user":"admin",
+              "vhost":"show-off",
+              "configure":".*",
+              "write":".*",
+              "read":".*"
+            },
+            {
+              "user":"show-off-api",
+              "vhost":"show-off",
+              "configure":".*",
+              "write":".*",
+              "read":".*"
+            }
+          ],
+          "topic_permissions":[
+          
+          ],
+          "parameters":[
+          
+          ],
+          "global_parameters":[
+          
+          ],
+          "policies":[
+          
+          ],
+          "queues":[
+            {
+              "name":"textCorrectionQueue",
+              "vhost":"show-off",
+              "durable":true,
+              "auto_delete":false,
+              "arguments":{
+                "x-queue-type":"classic"
+              }
+            },
+            {
+              "name":"imageDataQueue",
+              "vhost":"show-off",
+              "durable":true,
+              "auto_delete":false,
+              "arguments":{
+                "x-queue-type":"classic"
+              }
+            },
+            {
+              "name":"imageQueue",
+              "vhost":"show-off",
+              "durable":true,
+              "auto_delete":false,
+              "arguments":{
+                "x-queue-type":"classic"
+              }
+            }
+          ],
+          "exchanges":[
+          
+          ],
+          "bindings":[
+          
+          ]
         }
