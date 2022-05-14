@@ -78,7 +78,7 @@ public class ImageQueueListener {
 
     private Scope activateSpan(String operationName, TextMap carrier) {
         SpanContext receivedSpan = tracer.extract(Format.Builtin.TEXT_MAP, carrier);
-        Span span = tracer.buildSpan("receiveImage")
+        Span span = tracer.buildSpan(operationName)
                 .addReference(References.FOLLOWS_FROM, receivedSpan)
                 .start();
         return tracer.activateSpan(span);
