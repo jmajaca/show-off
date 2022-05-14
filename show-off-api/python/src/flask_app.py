@@ -9,6 +9,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_opentracing import FlaskTracer
 from jaeger_client import Config
+from opentracing_instrumentation.client_hooks import install_all_patches
 
 from schema.schemas import *
 
@@ -54,3 +55,5 @@ def initialize_tracer() -> opentracing.Tracer:
 
 
 tracing = FlaskTracer(tracer=lambda: initialize_tracer(), trace_all_requests=True, app=app)
+
+install_all_patches()
