@@ -11,6 +11,7 @@ from flask_cors import CORS
 from flask_opentracing import FlaskTracer
 from jaeger_client import Config
 
+import env
 from endpoints.doc_endpoint import doc_endpoint
 from endpoints.health_endpoint import health_endpoint, check_health
 from endpoints.ocr_endpoint import ocr_endpoint, read_image, correct_text
@@ -53,7 +54,7 @@ def initialize_tracer() -> opentracing.Tracer:
             },
             'logging': True,
             'reporter_batch_size': 1,
-        }, service_name='show-off-api')
+        }, service_name=env.JAEGER_SERVICE_NAME)
     return config.initialize_tracer()
 
 
