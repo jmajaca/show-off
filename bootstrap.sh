@@ -6,7 +6,7 @@ cd "$(dirname "$0")" || exit 1
 # installation of argocd command - https://argo-cd.readthedocs.io/en/stable/cli_installation/ & https://github.com/argoproj/argo-cd/issues/7035
 
 echo 'Installing minikube'
-minikube start --mount-string="/var/kubernetes/show-off-pv:/var/kubernetes" --mount
+minikube start --addons=ingress --mount-string="/var/kubernetes/show-off-pv:/var/kubernetes" --mount
 
 echo 'Installing ArgoCD'
 mkdir bin
@@ -52,6 +52,10 @@ printf "\n"
 
 minikube kubectl -- delete "$(minikube kubectl -- get events | grep BackOff | sed -r "s;.*(pod/[^ ]+).*;\1;")"
 
+echo 'Setup Jaeger Operator'
+minikube kubectl -- create namespace observability
+minikube kubectl -- apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.0/cert-manager.yaml
+minikube kubectl -- create -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.33.0/jaeger-operator.yaml -n observability
 
 echo 'Setup ArgoCD'
 
