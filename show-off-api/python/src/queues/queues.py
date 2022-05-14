@@ -5,9 +5,12 @@ import json
 import logging
 from abc import ABC, abstractmethod
 
+import opentracing
 import pika
+from opentracing_instrumentation import get_current_span
 
 import env
+from flask_app import tracing
 from models.image_api import TextCorrection, ImageBoxData
 
 log = logging.getLogger(__name__)
@@ -29,18 +32,27 @@ class Queue(ABC):
         self.exchange = exchange
 
     def _send_json(self, payload: dict | list, headers: dict):
-        connection = pika.BlockingConnection(self.__connection_params)
-        channel = connection.channel()
-        channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=json.dumps(payload),
-                              properties=pika.BasicProperties(content_type='application/json', headers=headers))
-        connection.close()
+        with tracing.start_span('Send JSON via queue', child_of=get_current_span()) as span:
+            carrier = {}
+            tracing.inject(span_context=span, format=opentracing.Format.TEXT_MAP, carrier=carrier)
+            headers['trace'] = carrier
+            connection = pika.BlockingConnection(self.__connection_params)
+            channel = connection.channel()
+            channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=json.dumps(payload),
+                                  properties=pika.BasicProperties(content_type='application/json', headers=headers))
+            connection.close()
 
     def _send_bytes(self, payload: bytes, headers: dict):
-        connection = pika.BlockingConnection(self.__connection_params)
-        channel = connection.channel()
-        channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=payload,
-                              properties=pika.BasicProperties(content_type='application/octet-stream', headers=headers))
-        connection.close()
+        with tracing.start_span('Send bytes via queue', child_of=get_current_span()) as span:
+            carrier = {}
+            tracing.inject(span_context=span, format=opentracing.Format.TEXT_MAP, carrier=carrier)
+            headers['trace'] = carrier
+            connection = pika.BlockingConnection(self.__connection_params)
+            channel = connection.channel()
+            channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=payload,
+                                  properties=pika.BasicProperties(content_type='application/octet-stream',
+                                                                  headers=headers))
+            connection.close()
 
     @abstractmethod
     def send(self, payload, headers: dict):
