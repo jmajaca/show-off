@@ -12,6 +12,7 @@ from flask_opentracing import FlaskTracer
 from jaeger_client import Config
 
 import env
+from schema.schemas import TextCorrectionSchema
 from endpoints.doc_endpoint import doc_endpoint
 from endpoints.health_endpoint import health_endpoint, check_health
 from endpoints.ocr_endpoint import ocr_endpoint, read_image, correct_text
