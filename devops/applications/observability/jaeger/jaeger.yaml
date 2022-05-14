@@ -3,3 +3,9 @@ kind: Jaeger
 metadata:
   name: jaeger
   namespace: observability
+spec:
+  storage:
+    type: memory
+    options:
+      memory:
+        max-traces: 1000
