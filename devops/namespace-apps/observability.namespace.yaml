@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: observability
+  namespace: argocd
+spec:
+  project: observability
+  source:
+    directory:
+      jsonnet: { }
+      recurse: true
+    repoURL: https://github.com/jmajaca/show-off.git
+    targetRevision: devops
+    path: devops/administration/observability
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated: { }
+    syncOptions:
+      - CreateNamespace=true
