@@ -1,5 +1,7 @@
 Flask==2.0.2
 Flask_Cors==3.0.10
+flask-opentracing==1.1.0
+jaeger-client==4.8.0
 apispec==5.1.1
 apispec_webframeworks==0.5.2
 marshmallow==3.14.1

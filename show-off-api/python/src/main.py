@@ -2,13 +2,15 @@ import json
 import logging
 import os
 
+import opentracing
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
 from flask import Flask
 from flask_cors import CORS
+from flask_opentracing import FlaskTracer
+from jaeger_client import Config
 
-from schema.schemas import TextCorrectionSchema
 from endpoints.doc_endpoint import doc_endpoint
 from endpoints.health_endpoint import health_endpoint, check_health
 from endpoints.ocr_endpoint import ocr_endpoint, read_image, correct_text
@@ -43,8 +45,19 @@ def create_app():
     return app
 
 
+def initialize_tracer() -> opentracing.Tracer:
+    config = Config(config={
+        'sampler': {
+            'type': 'const',
+            'param': 1
+        }
+    }, service_name='show-off-api')
+    return config.initialize_tracer()
+
+
 app = create_app()
 CORS(app)
+flask_tracer = FlaskTracer(tracer=initialize_tracer(), trace_all_requests=True, app=app)
 
 
 if __name__ == '__main__':
