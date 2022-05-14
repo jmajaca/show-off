@@ -55,6 +55,7 @@ minikube kubectl -- delete "$(minikube kubectl -- get events | grep BackOff | se
 echo 'Setup Jaeger Operator'
 minikube kubectl -- create namespace observability
 minikube kubectl -- apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.0/cert-manager.yaml
+sleep 20
 minikube kubectl -- create -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.33.0/jaeger-operator.yaml -n observability
 
 echo 'Setup ArgoCD'
