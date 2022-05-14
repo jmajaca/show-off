@@ -23,7 +23,7 @@ items:
     kind: ConfigMap
     metadata:
       name: rabbit-mq-config
-      namespace: iskon-infra
+      namespace: show-off-infra
     data:
       rabbitmq.config: |
         [
