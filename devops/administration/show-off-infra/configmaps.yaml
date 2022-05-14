@@ -19,5 +19,83 @@ items:
             proxy_pass http://backend;
           }
         }
-metadata:
-  resourceVersion: ""
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: rabbit-mq-config
+      namespace: iskon-infra
+    data:
+      rabbitmq.config: |
+        [
+          {
+            rabbit, [ {loopback_users, []} ]
+          },
+          {
+            rabbitmq_management, [ {load_definitions, "/etc/rabbitmq/definitions.json"} ]
+          }
+        ]
+      definitions.json: |
+        {
+         "users": [
+          {
+           "name": "show-off-api",
+           "password_hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+           "hashing_algorithm": "rabbit_password_hashing_sha256",
+           "tags": ""
+          },
+          {
+           "name": "image-api",
+           "password_hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+           "hashing_algorithm": "rabbit_password_hashing_sha256",
+           "tags": ""
+          }
+         ],
+         "vhosts": [
+          {
+           "name": "show-off"
+          }
+         ],
+         "permissions": [
+          {
+           "user": "show-off-api",
+           "vhost": "show-off",
+           "configure": ".*",
+           "write": ".*",
+           "read": ".*"
+          },
+          {
+           "user": "image-api",
+           "vhost": "show-off",
+           "configure": ".*",
+           "write": ".*",
+           "read": ".*"
+          }
+         ],
+         "parameters": [],
+         "policies": [],
+         "queues": [
+          {
+           "name": "imageQueue",
+           "vhost": "show-off",
+           "durable": true,
+           "auto_delete":false,
+           "arguments": {}
+          },
+          {
+           "name": "imageDataQueue",
+           "vhost": "show-off",
+           "durable": true,
+           "auto_delete":false,
+           "arguments": {}
+          },
+          {
+           "name": "textCorrectionQueue",
+           "vhost": "show-off",
+           "durable": true,
+           "auto_delete":false,
+           "arguments": {}
+          }
+         ],
+         "exchanges": [],
+         "bindings": []
+        }
