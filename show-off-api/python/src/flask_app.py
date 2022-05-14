@@ -54,8 +54,3 @@ def initialize_tracer() -> opentracing.Tracer:
 
 
 tracing = FlaskTracer(tracer=lambda: initialize_tracer(), trace_all_requests=True, app=app)
-
-
-def set_tracing_endpoints(endpoints: list) -> None:
-    for endpoint in endpoints:
-        tracing.trace(endpoint)
