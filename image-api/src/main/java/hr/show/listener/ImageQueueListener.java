@@ -37,7 +37,7 @@ public class ImageQueueListener {
     public void receiveImage(byte[] image,
                              @Header("request_id") String requestId,
                              @Header("trace") Map<String, String> carrier) {
-        Scope scope = activateSpan("receiveImage", carrier);
+        Scope scope = activateSpan("receiveImage", requestId, carrier);
         log.info("Received image with id '{}' from image queue", requestId);
         try {
             imageService.writeImage(image, requestId);
@@ -51,7 +51,7 @@ public class ImageQueueListener {
     public void receiveImageData(@Valid List<ImageBoxDataQueueMessage> imageBoxDataMessage,
                                  @Header("request_id") String requestId,
                                  @Header("trace") Map<String, String> carrier) {
-        Scope scope = activateSpan("receiveImageData", carrier);
+        Scope scope = activateSpan("receiveImageData", requestId, carrier);
         log.info("Received image data with id '{}' from image queue", requestId);
         try {
             if (requestId == null || requestId.equals("")) {
@@ -68,7 +68,7 @@ public class ImageQueueListener {
     public void receiveTextCorrection(@Valid TextCorrectionQueueMessage correctionDto,
                                       @Header("request_id") String requestId,
                                       @Header("trace") Map<String, String> carrier) {
-        Scope scope = activateSpan("textCorrectionQueue", carrier);
+        Scope scope = activateSpan("textCorrectionQueue", requestId, carrier);
         log.info("Received text correction for image with id '{}' from text correction queue", correctionDto.getId());
         try {
             imageService.saveTextCorrection(correctionDto.getId(), correctionDto.getText());
@@ -78,10 +78,11 @@ public class ImageQueueListener {
         scope.close();
     }
 
-    private Scope activateSpan(String operationName, Map<String, String> carrier) {
+    private Scope activateSpan(String operationName, String requestId, Map<String, String> carrier) {
         SpanContext receivedSpan = tracer.extract(Format.Builtin.TEXT_MAP, new TextMapAdapter(carrier));
         Span span = tracer.buildSpan(operationName)
                 .addReference(References.CHILD_OF, receivedSpan)
+                .withTag("requestId", requestId)
                 .start();
         return tracer.activateSpan(span);
     }
