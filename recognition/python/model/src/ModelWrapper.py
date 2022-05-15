@@ -31,7 +31,7 @@ class ModelWrapper:
         for data in dataloader:
             prediction = self.model(data)
             results = self.converter.decode(*prepare_prediction_for_conversion(prediction))
-            if len(results) == 1:
-                return [results]
-            else:
+            if isinstance(results, list):
                 return results
+            else:
+                return [results]
