@@ -4,9 +4,6 @@ import hr.show.message.ImageBoxDataQueueMessage;
 import hr.show.message.TextCorrectionQueueMessage;
 import hr.show.exception.InvalidImageDataQueueMessage;
 import hr.show.service.ImageService;
-import io.opentracing.*;
-import io.opentracing.propagation.Format;
-import io.opentracing.propagation.TextMapAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -16,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class ImageQueueListener {
@@ -25,33 +21,25 @@ public class ImageQueueListener {
 
     private final ImageService imageService;
 
-    private final Tracer tracer;
-
     @Autowired
-    public ImageQueueListener(ImageService imageService, Tracer tracer) {
+    public ImageQueueListener(ImageService imageService) {
         this.imageService = imageService;
-        this.tracer = tracer;
     }
 
     @RabbitListener(queues = "imageQueue")
     public void receiveImage(byte[] image,
-                             @Header("request_id") String requestId,
-                             @Header("trace") Map<String, String> carrier) {
-        Scope scope = activateSpan("receiveImage", requestId, carrier);
+                             @Header("request_id") String requestId) {
         log.info("Received image with id '{}' from image queue", requestId);
         try {
             imageService.writeImage(image, requestId);
         } catch (Exception e) {
             log.error("Error has occurred while saving image from queue: ", e);
         }
-        scope.close();
     }
 
     @RabbitListener(queues = "imageDataQueue")
     public void receiveImageData(@Valid List<ImageBoxDataQueueMessage> imageBoxDataMessage,
-                                 @Header("request_id") String requestId,
-                                 @Header("trace") Map<String, String> carrier) {
-        Scope scope = activateSpan("receiveImageData", requestId, carrier);
+                                 @Header("request_id") String requestId) {
         log.info("Received image data with id '{}' from image queue", requestId);
         try {
             if (requestId == null || requestId.equals("")) {
@@ -61,30 +49,17 @@ public class ImageQueueListener {
         } catch (Exception e) {
             log.error("Error has occurred while saving image data from queue: ", e);
         }
-        scope.close();
     }
 
     @RabbitListener(queues = "textCorrectionQueue")
     public void receiveTextCorrection(@Valid TextCorrectionQueueMessage correctionDto,
-                                      @Header("request_id") String requestId,
-                                      @Header("trace") Map<String, String> carrier) {
-        Scope scope = activateSpan("textCorrectionQueue", requestId, carrier);
+                                      @Header("request_id") String requestId) {
         log.info("Received text correction for image with id '{}' from text correction queue", correctionDto.getId());
         try {
             imageService.saveTextCorrection(correctionDto.getId(), correctionDto.getText());
         } catch (Exception e) {
             log.error("Error has occurred while saving text correction from queue: ", e);
         }
-        scope.close();
-    }
-
-    private Scope activateSpan(String operationName, String requestId, Map<String, String> carrier) {
-        SpanContext receivedSpan = tracer.extract(Format.Builtin.TEXT_MAP, new TextMapAdapter(carrier));
-        Span span = tracer.buildSpan(operationName)
-                .addReference(References.CHILD_OF, receivedSpan)
-                .withTag("requestId", requestId)
-                .start();
-        return tracer.activateSpan(span);
     }
 
 }
