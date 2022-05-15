@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rabbit-mq
+  name: jaeger
   namespace: argocd
 spec:
-  project: show-off-infra
+  project: observability
   source:
     directory:
       jsonnet: { }
       recurse: true
     repoURL: https://github.com/jmajaca/show-off.git
     targetRevision: devops
-    path: devops/applications/show-off-infra/rabbit-mq
+    path: devops/applications/observability/jaeger
   destination:
     server: https://kubernetes.default.svc
-    namespace: show-off-infra
+    namespace: show-off
   syncPolicy:
     automated: { }

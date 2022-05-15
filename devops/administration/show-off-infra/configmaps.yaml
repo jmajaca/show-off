@@ -19,5 +19,145 @@ items:
             proxy_pass http://backend;
           }
         }
-metadata:
-  resourceVersion: ""
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: rabbit-mq-config
+      namespace: show-off-infra
+    data:
+      rabbitmq.config: |
+        [
+          {
+            rabbit, [ {loopback_users, []} ]
+          },
+          {
+            rabbitmq_management, [ {load_definitions, "/etc/rabbitmq/definitions.json"} ]
+          }
+        ].
+      definitions.json: |
+        {
+          "rabbit_version":"3.10.1",
+          "rabbitmq_version":"3.10.1",
+          "product_name":"RabbitMQ",
+          "product_version":"3.10.1",
+          "users":[
+            {
+              "name":"admin",
+              "password_hash":"d9srHc5WQHTB7CN4ge37hcSy3gytNzyxO+Fs+SXp6I5PG0Jl",
+              "hashing_algorithm":"rabbit_password_hashing_sha256",
+              "tags":[
+                "administrator"
+              ],
+              "limits":{
+              
+              }
+            },
+            {
+              "name":"show-off-api",
+              "password_hash":"Z89iLXrYeEVXjoWacqT/6Vnce2P2awTPDi64TkeGrcgPXS5V",
+              "hashing_algorithm":"rabbit_password_hashing_sha256",
+              "tags":[
+              
+              ],
+              "limits":{
+              
+              }
+            },
+            {
+              "name":"image-api",
+              "password_hash":"Bz2tvPaZ2qAseroajGkle6TVMyrxczHcInC8k41AUMNTq/Ia",
+              "hashing_algorithm":"rabbit_password_hashing_sha256",
+              "tags":[
+              
+              ],
+              "limits":{
+              
+              }
+            }
+          ],
+          "vhosts":[
+            {
+              "name":"/"
+            },
+            {
+              "name":"show-off"
+            }
+          ],
+          "permissions":[
+            {
+              "user":"image-api",
+              "vhost":"show-off",
+              "configure":".*",
+              "write":".*",
+              "read":".*"
+            },
+            {
+              "user":"admin",
+              "vhost":"/",
+              "configure":".*",
+              "write":".*",
+              "read":".*"
+            },
+            {
+              "user":"admin",
+              "vhost":"show-off",
+              "configure":".*",
+              "write":".*",
+              "read":".*"
+            },
+            {
+              "user":"show-off-api",
+              "vhost":"show-off",
+              "configure":".*",
+              "write":".*",
+              "read":".*"
+            }
+          ],
+          "topic_permissions":[
+          
+          ],
+          "parameters":[
+          
+          ],
+          "global_parameters":[
+          
+          ],
+          "policies":[
+          
+          ],
+          "queues":[
+            {
+              "name":"textCorrectionQueue",
+              "vhost":"show-off",
+              "durable":true,
+              "auto_delete":false,
+              "arguments":{
+                "x-queue-type":"classic"
+              }
+            },
+            {
+              "name":"imageDataQueue",
+              "vhost":"show-off",
+              "durable":true,
+              "auto_delete":false,
+              "arguments":{
+                "x-queue-type":"classic"
+              }
+            },
+            {
+              "name":"imageQueue",
+              "vhost":"show-off",
+              "durable":true,
+              "auto_delete":false,
+              "arguments":{
+                "x-queue-type":"classic"
+              }
+            }
+          ],
+          "exchanges":[
+          
+          ],
+          "bindings":[
+          
+          ]
+        }

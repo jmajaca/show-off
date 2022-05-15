@@ -9,7 +9,7 @@ spec:
     directory:
       jsonnet: { }
       recurse: true
-    repoURL: git@github.com:jmajaca/show-off.git
+    repoURL: https://github.com/jmajaca/show-off.git
     targetRevision: devops
     path: devops/applications/show-off/show-off-ui
   destination:

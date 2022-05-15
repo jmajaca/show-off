@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: detection-api
+  annotations:
+    sidecar.jaegertracing.io/inject: "true"
   labels:
     app: detection-api
     type: backend-python
@@ -39,6 +41,13 @@ spec:
             port: 5000
           initialDelaySeconds: 10
           periodSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 100Mi
       volumes:
         - name: k8s-local-volume
           hostPath:

@@ -39,4 +39,15 @@ spec:
             port: 5672
           initialDelaySeconds: 10
           periodSeconds: 5
-# TODO mount volume
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/rabbitmq/rabbitmq.config
+            subPath: rabbitmq.config
+          - name: config-volume
+            mountPath: /etc/rabbitmq/definitions.json
+            subPath: definitions.json
+      volumes:
+        - name: config-volume
+          configMap:
+            name: rabbit-mq-config
+#       TODO mount persistent volume
