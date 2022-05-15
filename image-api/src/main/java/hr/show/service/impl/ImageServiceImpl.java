@@ -74,13 +74,15 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void writeImage(byte[] image, String requestId) {
         Span span = tracer.buildSpan("writeImage").start();
-        try(Scope scope = tracer.activateSpan(span)) {
+        try(Scope ignored = tracer.activateSpan(span)) {
             String path = ImageUtil.joinDirAndFilePaths(filePath, ImageUtil.getCurrentDayDirName(), requestId + JPG_EXTENSION);
             try (FileOutputStream stream = new FileOutputStream(path)) {
                 stream.write(image);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        } finally {
+            span.finish();
         }
     }
 
