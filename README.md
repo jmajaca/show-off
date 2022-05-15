@@ -1,7 +1,7 @@
 # Project: **show-off**
 
 ![ArgoCD](doc/logos/argocd.png) ![Docker](doc/logos/docker.png) ![Flask](doc/logos/flask.png) ![GitHub Actions](doc/logos/github_actions.png)
-![Go](doc/logos/golang.png) ![Java](doc/logos/java.png) ![Kubernetes](doc/logos/kubernetes.png) ![Minikube](doc/logos/minikube.png)
+![Go](doc/logos/golang.png) ![Jaeger](doc/logos/jaeger.png) ![Java](doc/logos/java.png) ![Kubernetes](doc/logos/kubernetes.png) ![Minikube](doc/logos/minikube.png)
 ![nginx](doc/logos/nginx.png) ![PostgreSQL](doc/logos/postgre.png) ![Python](doc/logos/python.png) ![Pytorch](doc/logos/pytorch.png) 
 ![RabbitMQ](doc/logos/rabbit.png) ![React](doc/logos/react.png) ![Spring Boot](doc/logos/spring_boot.png) ![Typescript](doc/logos/typescript.png) 
 
@@ -153,6 +153,13 @@ In argo namespace, ArgoCD is installed, in show-off-infra rabbit queue and Postg
 microservices are in show-off namespace.
 
 ![show-off namespace](doc/images/minikube.png)
+
+### Tracing
+
+Jaeger is used for tracing requests. All communication between microservices via REST endpoints and queues is traced
+alongside with traces of invoking database operations.
+
+![tracing read image request](doc/images/tracing.png)
 
 ### GitHub Actions
 
