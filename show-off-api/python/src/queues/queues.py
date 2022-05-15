@@ -35,7 +35,7 @@ class Queue(ABC):
         with tracing.tracer.start_span('Send JSON via queue', child_of=get_current_span()) as span:
             carrier = {}
             tracing.tracer.inject(span_context=span, format=opentracing.Format.TEXT_MAP, carrier=carrier)
-            headers['trace'] = carrier
+            headers.update(carrier)
             connection = pika.BlockingConnection(self.__connection_params)
             channel = connection.channel()
             channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=json.dumps(payload),
@@ -46,7 +46,7 @@ class Queue(ABC):
         with tracing.tracer.start_span('Send bytes via queue', child_of=get_current_span()) as span:
             carrier = {}
             tracing.tracer.inject(span_context=span, format=opentracing.Format.TEXT_MAP, carrier=carrier)
-            headers['trace'] = carrier
+            headers.update(carrier)
             connection = pika.BlockingConnection(self.__connection_params)
             channel = connection.channel()
             channel.basic_publish(exchange=self.exchange, routing_key=self.queue, body=payload,
