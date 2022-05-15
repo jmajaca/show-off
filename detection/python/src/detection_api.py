@@ -3,13 +3,18 @@ import os
 import logging
 from datetime import datetime
 
+import opentracing as opentracing
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_opentracing import FlaskTracer
 from typing import Tuple
 
+from jaeger_client import Config
+
+import env
 from api_schemas import *
 from detection_service import DetectionService
 from exceptions import InvalidImageError
@@ -23,6 +28,20 @@ spec = APISpec(
     plugins=[FlaskPlugin(), MarshmallowPlugin()],
     openapi_version='3.0.3'
 )
+
+
+def initialize_tracer() -> opentracing.Tracer:
+    config = Config(config={
+            'sampler': {
+                'type': 'const',
+                'param': 1
+            },
+            'reporter_batch_size': 1,
+        }, service_name=env.JAEGER_SERVICE_NAME)
+    return config.initialize_tracer()
+
+
+tracing = FlaskTracer(tracer=lambda: initialize_tracer(), trace_all_requests=True, app=app)
 
 
 @app.route('/boxes', methods=['POST'])
@@ -87,6 +106,7 @@ def determine_minimal_boxes():
           description: Error occurred while in process of determining minimal text boxes
     """
     try:
+        logging.info(request.headers)
         files = request.files.to_dict()
         image_string = DetectionService.read_image_as_string(files)
         result = DetectionService.configure_box_response(image_string, 'minimal')
