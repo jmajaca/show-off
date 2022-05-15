@@ -1,7 +1,6 @@
 package hr.show.listener;
 
 import hr.show.message.ImageBoxDataQueueMessage;
-import hr.show.message.ImageDataQueueMessage;
 import hr.show.message.TextCorrectionQueueMessage;
 import hr.show.exception.InvalidImageDataQueueMessage;
 import hr.show.service.ImageService;
@@ -28,7 +27,8 @@ public class ImageQueueListener {
     }
 
     @RabbitListener(queues = "imageQueue")
-    public void receiveImage(byte[] image, @Header("request_id") String requestId) {
+    public void receiveImage(byte[] image,
+                             @Header("request_id") String requestId) {
         log.info("Received image with id '{}' from image queue", requestId);
         try {
             imageService.writeImage(image, requestId);
@@ -38,7 +38,8 @@ public class ImageQueueListener {
     }
 
     @RabbitListener(queues = "imageDataQueue")
-    public void receiveImageData(@Valid List<ImageBoxDataQueueMessage> imageBoxDataMessage, @Header("request_id") String requestId) {
+    public void receiveImageData(@Valid List<ImageBoxDataQueueMessage> imageBoxDataMessage,
+                                 @Header("request_id") String requestId) {
         log.info("Received image data with id '{}' from image queue", requestId);
         try {
             if (requestId == null || requestId.equals("")) {
@@ -51,7 +52,8 @@ public class ImageQueueListener {
     }
 
     @RabbitListener(queues = "textCorrectionQueue")
-    public void receiveTextCorrection(@Valid TextCorrectionQueueMessage correctionDto, @Header("request_id") String requestId) {
+    public void receiveTextCorrection(@Valid TextCorrectionQueueMessage correctionDto,
+                                      @Header("request_id") String requestId) {
         log.info("Received text correction for image with id '{}' from text correction queue", correctionDto.getId());
         try {
             imageService.saveTextCorrection(correctionDto.getId(), correctionDto.getText());
