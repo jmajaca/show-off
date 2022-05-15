@@ -11,6 +11,9 @@ import hr.show.repository.ImageRepository;
 import hr.show.repository.TextCorrectionRepository;
 import hr.show.service.ImageService;
 import hr.show.util.ImageUtil;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +32,21 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageBoxDataQueueDtoToImageBoxMapper imageBoxDataQueueDtoToImageBoxMapper;
 
+    private final Tracer tracer;
+
     private final String filePath;
 
     private static final String JPG_EXTENSION = ".jpg";
 
     @Autowired
     public ImageServiceImpl(ImageRepository imageRepository, TextCorrectionRepository textCorrectionRepository,
-                            FileProperties fileProperties, ImageBoxDataQueueDtoToImageBoxMapper imageBoxDataQueueDtoToImageBoxMapper) {
+                            FileProperties fileProperties, ImageBoxDataQueueDtoToImageBoxMapper imageBoxDataQueueDtoToImageBoxMapper,
+                            Tracer tracer) {
         this.imageRepository = imageRepository;
         this.textCorrectionRepository = textCorrectionRepository;
         this.imageBoxDataQueueDtoToImageBoxMapper = imageBoxDataQueueDtoToImageBoxMapper;
         this.filePath = fileProperties.getPath();
+        this.tracer = tracer;
     }
 
     @Override
@@ -66,11 +73,14 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void writeImage(byte[] image, String requestId) {
-        String path = ImageUtil.joinDirAndFilePaths(filePath, ImageUtil.getCurrentDayDirName(), requestId + JPG_EXTENSION);
-        try (FileOutputStream stream = new FileOutputStream(path)) {
-            stream.write(image);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        Span span = tracer.buildSpan("writeImage").start();
+        try(Scope scope = tracer.activateSpan(span)) {
+            String path = ImageUtil.joinDirAndFilePaths(filePath, ImageUtil.getCurrentDayDirName(), requestId + JPG_EXTENSION);
+            try (FileOutputStream stream = new FileOutputStream(path)) {
+                stream.write(image);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
